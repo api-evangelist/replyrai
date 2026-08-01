@@ -1,0 +1,17 @@
+generated: '2026-07-20'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: replyr.ai
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 29 09:49:36 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+domains:
+- domain: replyr.ai
+  dnssec: false
+  caa: []
+  spf: false
+  dmarc: true
+  dmarc_policy: none

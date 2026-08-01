@@ -1,7 +1,28 @@
 aid: replyrai
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/replyrai.png
 name: Replyr.ai
-description: Replyr.ai is a company surfaced as a portfolio company of 500-global and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Replyr.ai (Replyr Sdn Bhd, Kuala Lumpur, Malaysia) is an AI-powered customer
+  engagement and lead-acquisition platform. It builds GPT-style chat assistants
+  that reply instantly in multiple languages across WhatsApp and other chat
+  channels to qualify leads, answer FAQs, recommend products, and book
+  appointments 24/7. The company packages this with Meta and Google advertising
+  campaigns and a BookAClinic discovery marketplace, positioning itself as a
+  patient-acquisition solution for specialised clinics. Surfaced as a 500 Global
+  portfolio company and added to the API Evangelist network; as of this
+  enrichment pass Replyr.ai publishes no public developer portal, API reference,
+  or machine-readable API surface.
 url: https://raw.githubusercontent.com/api-evangelist/replyrai/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,9 +32,16 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
+- Artificial Intelligence
+- Chatbots
+- Conversational AI
+- Customer Engagement
+- Lead Generation
+- WhatsApp
+- Marketing
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -21,5 +49,12 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/replyrai-domain-security.yml
 - type: Website
   url: https://replyr.ai
+x-enrichment:
+  date: '2026-07-20'
+  status: minimal
+  artifacts_added: 1
+  pass: local-v1
