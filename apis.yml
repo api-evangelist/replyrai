@@ -1,38 +1,42 @@
 aid: replyrai
 accessModel:
-  pricing: unknown
-  onboarding: unknown
+  pricing: contact-sales
+  onboarding: sales-gate
   trial: false
   try_now: false
   public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
-  method: derived
+  label: Contact sales
+  confidence: medium
+  source:
+  - https://replyr.ai/
+  - https://app.replyr.ai/en/login
+  generated: '2026-08-13'
+  method: searched
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/replyrai.png
 name: Replyr.ai
 description: >-
   Replyr.ai (Replyr Sdn Bhd, Kuala Lumpur, Malaysia) is an AI-powered customer
-  engagement and lead-acquisition platform. It builds GPT-style chat assistants
-  that reply instantly in multiple languages across WhatsApp and other chat
-  channels to qualify leads, answer FAQs, recommend products, and book
-  appointments 24/7. The company packages this with Meta and Google advertising
-  campaigns and a BookAClinic discovery marketplace, positioning itself as a
-  patient-acquisition solution for specialised clinics. Surfaced as a 500 Global
-  portfolio company and added to the API Evangelist network; as of this
-  enrichment pass Replyr.ai publishes no public developer portal, API reference,
-  or machine-readable API surface.
+  engagement and patient-acquisition platform aimed at Malaysian clinics. It
+  builds GPT-style chat assistants that reply instantly in multiple languages
+  across WhatsApp, Instagram, Facebook Messenger and other chat channels to
+  qualify leads, answer FAQs, recommend products and book appointments 24/7, and
+  packages that with Meta and Google advertising campaigns and a BookAClinic
+  discovery marketplace. The operator console at app.replyr.ai runs a
+  white-labeled deployment of the ChatRace conversational-commerce platform and
+  exposes a REST API of its own at https://app.replyr.ai/api, documented with a
+  live Swagger UI and a Swagger 2.0 specification covering accounts, contacts,
+  tags and custom fields, message sending across channels, sales pipelines and
+  opportunities, AI agents, appointment calendars, templates and an ecommerce
+  cart/order surface. Authentication is a single X-ACCESS-TOKEN API key header.
+  Surfaced as a 500 Global portfolio company.
 url: https://raw.githubusercontent.com/api-evangelist/replyrai/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - 500-global
-x-tier: stub
-x-tier-reason: portfolio-lead
-specificationVersion: '0.20'
+specificationVersion: '0.21'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-08-13'
 tags:
 - Company
 - Artificial Intelligence
@@ -42,19 +46,98 @@ tags:
 - Lead Generation
 - WhatsApp
 - Marketing
-apis: []
+- Messaging
+- CRM
+- Appointment Scheduling
+- Healthcare
+- Malaysia
+apis:
+- name: Replyr Platform API
+  description: >-
+    REST API for the Replyr operator console at app.replyr.ai. Covers business
+    account details, admins and teams, tags, custom fields and bot fields,
+    contacts (create, look up, tag, set fields), outbound messaging across the
+    connected chat channels (text, file, product, flow and multi-action
+    send_content), sales pipelines with stages, opportunities and comments, AI
+    agents with their functions, files and configured MCP connections,
+    appointment calendars, template installation, and an ecommerce cart, order
+    and product surface. Authenticated with a single X-ACCESS-TOKEN API key
+    header issued from the console.
+  humanURL: https://app.replyr.ai/api
+  baseURL: https://app.replyr.ai/api
+  tags:
+  - Conversational AI
+  - Chatbots
+  - Messaging
+  - WhatsApp
+  - CRM
+  - Lead Generation
+  - Appointment Scheduling
+  - Customer Engagement
+  properties:
+  - type: OpenAPI
+    url: openapi/replyrai-platform-api-swagger.json
+  - type: APIReference
+    url: https://app.replyr.ai/api
+  - type: Documentation
+    url: https://app.replyr.ai/api
+  - type: Authentication
+    url: authentication/replyrai-authentication.yml
+  - type: Conventions
+    url: conventions/replyrai-conventions.yml
+  - type: DataModel
+    url: data-model/replyrai-data-model.yml
+  - type: ErrorCatalog
+    url: errors/replyrai-problem-types.yml
+  - type: Overlay
+    url: overlays/replyrai-platform-api-overlay.yaml
+  - type: AgentSkill
+    url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
-- type: DomainSecurity
-  url: security/replyrai-domain-security.yml
 - type: Website
   url: https://replyr.ai
+- type: APIReference
+  url: https://app.replyr.ai/api
+- type: Documentation
+  url: https://app.replyr.ai/api
+- type: Login
+  url: https://app.replyr.ai/en/login
+- type: Support
+  url: https://wa.me/60109696912
+- type: DomainSecurity
+  url: security/replyrai-domain-security.yml
+- type: Authentication
+  url: authentication/replyrai-authentication.yml
+- type: Conventions
+  url: conventions/replyrai-conventions.yml
+- type: ErrorCatalog
+  url: errors/replyrai-problem-types.yml
+- type: DataModel
+  url: data-model/replyrai-data-model.yml
+- type: Lifecycle
+  url: lifecycle/replyrai-lifecycle.yml
+- type: Conformance
+  url: conformance/replyrai-conformance.yml
+- type: Packages
+  url: packages/replyrai-packages.yml
+- type: LLMsTxt
+  url: llms/replyrai-llms.txt
+- type: Overlay
+  url: overlays/replyrai-platform-api-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Plans
+  url: plans/replyrai-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/replyrai-rate-limits.yml
 x-enrichment:
-  date: '2026-07-20'
-  status: minimal
-  artifacts_added: 1
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 19
   pass: local-v1
+
