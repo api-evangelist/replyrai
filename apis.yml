@@ -34,7 +34,7 @@ x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - 500-global
-specificationVersion: '0.21'
+specificationVersion: '0.23'
 created: '2026-07-17'
 modified: '2026-08-13'
 tags:
