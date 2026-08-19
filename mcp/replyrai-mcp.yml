@@ -1,0 +1,134 @@
+generated: '2026-08-13'
+method: derived
+status: candidate
+source: openapi/replyrai-platform-api-swagger.json
+note: >-
+  Replyr does not ship an MCP server. No hosted endpoint answered a tools/list
+  JSON-RPC POST (mcp.replyr.ai did not resolve; app.replyr.ai/mcp returned 404;
+  replyr.ai/mcp returned the marketing single-page-app shell; app.replyr.ai/api/mcp
+  returned the REST API's 401 "No valid API key provided." envelope, which is the
+  catch-all for every unauthenticated /api/* path and not an MCP surface). No MCP
+  package exists on npm or PyPI. The tools below are a CANDIDATE mapping derived
+  by API Evangelist from the provider's own Swagger 2.0 operations - they are what
+  an MCP server over this API could expose, not something Replyr publishes. No
+  MCPServer pointer is wired in apis.yml, because that pointer asserts the provider
+  serves an agent surface and Replyr does not.
+  Note the API itself has an MCP-adjacent read operation, GET /agents/mcp
+  (getAIMCPs), which lists the MCP connections a customer has configured for their
+  own AI agents inside Replyr. That makes Replyr an MCP *consumer* on behalf of its
+  customers, not an MCP *provider*.
+deployment:
+  mode: none
+  auth: api-key
+  verified: probed
+probes:
+- url: https://mcp.replyr.ai/mcp
+  method: POST tools/list
+  status: 000
+  result: host does not resolve
+- url: https://app.replyr.ai/mcp
+  method: POST tools/list
+  status: 404
+  result: not found
+- url: https://app.replyr.ai/api/mcp
+  method: POST tools/list
+  status: 401
+  result: >-
+    REST API auth envelope, not an MCP handshake -
+    {"error":{"code":401,"message":"No valid API key provided."}}
+- url: https://replyr.ai/mcp
+  method: POST tools/list
+  status: 200
+  result: HTML single-page-app shell (3470 bytes), not JSON - rejected
+server:
+  name: null
+  endpoint: null
+  transport: null
+  auth:
+    type: apiKey
+    header: X-ACCESS-TOKEN
+candidate_tools:
+- name: get_account_information
+  description: Get business account details.
+  rest: getAccountInformation
+  operation: GET /accounts/me
+- name: list_account_tags
+  description: Get all tags from a business account.
+  rest: getAccountTags
+  operation: GET /accounts/tags
+- name: create_tag
+  description: Create a new tag.
+  rest: createTag
+  operation: POST /accounts/tags
+- name: list_account_flows
+  description: Get all flows from a business account.
+  rest: getAccountFlows
+  operation: GET /accounts/flows
+- name: list_custom_fields
+  description: Get all custom fields from a business account.
+  rest: getAccountCustomFields
+  operation: GET /accounts/custom_fields
+- name: create_contact
+  description: Create a new contact from a phone number, with optional tags and field actions.
+  rest: createNewContact
+  operation: POST /contacts
+- name: get_contact
+  description: Get a contact by contact id.
+  rest: getUserByName
+  operation: GET /contacts/{contact_id}
+- name: find_contacts_by_custom_field
+  description: Find contacts by custom field value (max 100 results).
+  rest: findByCustomField
+  operation: GET /contacts/find_by_custom_field
+- name: add_tag_to_contact
+  description: Add a tag to the contact.
+  rest: addTagToUser
+  operation: POST /contacts/{contact_id}/tags/{tag_id}
+- name: set_contact_custom_field
+  description: Set a contact custom field value.
+  rest: addFieldToUser
+  operation: POST /contacts/{contact_id}/custom_fields/{custom_field_id}
+- name: send_text_message
+  description: Send a text message to the contact on their connected channel.
+  rest: sendTextMessage
+  operation: POST /contacts/{contact_id}/send/text
+- name: send_flow
+  description: Send a conversational flow to a contact.
+  rest: sendFlowToUser
+  operation: POST /contacts/{contact_id}/send/{flow_id}
+- name: send_content
+  description: Run multiple actions and send multiple messages across any channel.
+  rest: sendContent
+  operation: POST /contacts/{contact_id}/send_content
+- name: list_pipelines
+  description: Get the list of sales pipelines.
+  rest: getPipelines
+  operation: GET /pipelines
+- name: list_opportunities
+  description: Get the list of opportunities / tickets in a pipeline.
+  rest: pipelinesGetCards
+  operation: GET /pipelines/{pipeline_id}/opportunities
+- name: create_opportunity
+  description: Create an opportunity / ticket in a pipeline.
+  rest: pipelinesAddCard
+  operation: POST /pipelines/{pipeline_id}/opportunities
+- name: update_opportunity
+  description: Update an opportunity / ticket.
+  rest: pipelinesUpdateCard
+  operation: POST /pipelines/{pipeline_id}/opportunities/{opportunity_id}
+- name: list_ai_agents
+  description: Get the list of AI agents configured on the account.
+  rest: getAIAgents
+  operation: GET /agents/
+- name: list_calendars
+  description: Get the list of appointment calendars.
+  rest: getCalendars
+  operation: GET /calendars
+- name: get_contact_cart
+  description: Get the contact cart ready for checkout.
+  rest: getUserCart
+  operation: GET /contacts/{contact_id}/cart
+tool_count: 20
+coverage:
+  rest_operations_total: 65
+  mapped_in_candidate: 20

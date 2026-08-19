@@ -1,0 +1,167 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/replyrai-platform-api-swagger.json, plus live unauthenticated probes of
+  https://app.replyr.ai/api/accounts/me
+docs: https://app.replyr.ai/api
+note: >-
+  Replyr publishes a Swagger UI and a Swagger 2.0 document but no prose
+  conventions guide, so the cross-cutting semantics below are derived from the
+  specification itself and from observed live responses. Where the provider
+  documents nothing, that is recorded as supported=false rather than guessed.
+base_url: https://app.replyr.ai/api
+
+authentication:
+  style: api-key-header
+  header: X-ACCESS-TOKEN
+  scheme_name: APIKeyHeader
+  applied: global
+  detail: >-
+    A single securityDefinitions entry of type apiKey, applied globally via the
+    root-level security block, so every one of the 65 operations requires the
+    same header. There is no OAuth, no bearer token, no scope surface and no
+    per-operation security override.
+  see: authentication/replyrai-authentication.yml
+
+idempotency:
+  supported: false
+  header: null
+  detail: >-
+    No idempotency key header, no request-deduplication parameter, and no
+    at-most-once guarantee is defined anywhere in the specification or the
+    reference. This matters more than usual here because the write surface
+    includes outbound messaging (sendTextMessage, sendFile, sendFlowToUser,
+    sendContent, sendProduct) and payment state changes (payOrder, changeOrder) -
+    operations where a retried POST can send a duplicate WhatsApp message to a
+    real person or double-apply an order state transition. A client must
+    implement its own deduplication.
+
+pagination:
+  supported: true
+  style: offset-limit
+  params:
+  - name: offset
+    in: query
+    type: integer
+    default: 0
+    description: Starting position of the first record to return.
+  - name: limit
+    in: query
+    type: integer
+    default: 100
+    description: Maximum number of records to return per request.
+  response_field: data
+  cursor: false
+  total_count_field: null
+  operations:
+  - getPipelines
+  - pipelinesGetCards
+  - pipelinesGetComments
+  detail: >-
+    Only three operations declare offset/limit. Several other collection reads
+    are hard-capped instead of paginated: findByCustomField and getAIAgents both
+    document a maximum of 100 items in the response schema with no way to page
+    past it, so a contact set larger than 100 cannot be walked through the
+    documented surface.
+
+response_envelope:
+  collections:
+    shape: '{"data": [ ... ]}'
+    detail: List operations wrap results in a top-level data array.
+  singletons:
+    shape: bare object
+    detail: >-
+      Single-resource reads return the object directly with no envelope, e.g.
+      getUserByName returns a Contact and getAccountInformation returns an
+      account object inline.
+  mutations:
+    shape: '{"success": true}'
+    detail: >-
+      Several write operations return a boolean success flag rather than the
+      mutated resource, e.g. payOrder. Seven operations declare only a "default"
+      response with no schema at all.
+
+error_envelope:
+  shape: '{"error": {"code": <int>, "message": <string>}}'
+  observed: true
+  observed_at: https://app.replyr.ai/api/accounts/me
+  example: '{"error":{"code":401,"message":"No valid API key provided."}}'
+  rfc9457: false
+  content_type_declared: text/html; charset=UTF-8
+  detail: >-
+    The live error body is JSON and repeats the HTTP status inside the payload,
+    but the response is served with Content-Type text/html; charset=UTF-8 rather
+    than application/json or application/problem+json. A strict client that
+    negotiates on content type will not parse it. The error envelope is not
+    documented in the specification at all - it was observed by probing.
+  see: errors/replyrai-problem-types.yml
+
+rate_limit_signaling:
+  supported: false
+  headers: []
+  status_on_exhaustion: null
+  detail: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header was returned on any
+    observed response, and the reference documents no limits.
+  see: rate-limits/replyrai-rate-limits.yml
+
+versioning:
+  scheme: none-in-path
+  spec_version: '1.1'
+  in_url: false
+  header: null
+  detail: >-
+    The specification carries info.version 1.1 and the Swagger UI asset is
+    cache-busted with a ?v=22 query string, but the API itself is unversioned -
+    basePath is / under host app.replyr.ai/api with no version segment and no
+    version header. There is no published policy for how a breaking change would
+    be communicated.
+  see: lifecycle/replyrai-lifecycle.yml
+
+field_expansion:
+  supported: false
+  detail: No expand, include, fields or sparse-fieldset parameter is defined.
+
+metadata:
+  supported: true
+  mechanism: custom_fields + bot_fields + tags
+  detail: >-
+    Rather than a generic metadata bag, arbitrary key/values attach through
+    first-class resources - account-level custom fields (getAccountCustomFields,
+    createCustomField), per-contact values (addFieldToUser, getFieldValue),
+    account-scoped bot fields (setBField, getBFieldValue) and tags (createTag,
+    addTagToUser). Custom fields and tags are addressable by name as well as id
+    (getCustomFieldByName, getTagByName), which lets a client avoid storing
+    numeric ids.
+
+request_id_tracing:
+  supported: false
+  header: null
+  detail: >-
+    No request id, correlation id or trace header is documented or returned on
+    observed responses, so a failed call cannot be handed to support by
+    reference.
+
+content_types:
+  request:
+  - application/json
+  - application/x-www-form-urlencoded
+  response:
+  - application/json
+  detail: >-
+    Mixed. Most write operations consume application/json bodies, but several
+    take formData parameters (payOrder, changeOrder, setBField, createTag,
+    createCustomField), so a client cannot assume one request encoding across the
+    surface.
+
+conditional_requests:
+  supported: false
+  detail: No ETag, If-Match, If-None-Match or Last-Modified semantics are defined.
+
+webhooks:
+  supported: false
+  detail: >-
+    The specification defines no webhooks, callbacks or event subscriptions, and
+    no AsyncAPI or event catalog is published. Inbound message handling is
+    configured through flows in the console rather than through a documented
+    subscription API.

@@ -1,0 +1,3788 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.1",
+    "title": "API Docs"
+  },
+  "tags": [
+    {
+      "name": "Accounts"
+    },
+    {
+      "name": "Contacts"
+    }
+  ],
+  "security": [
+    {
+        "APIKeyHeader": []
+    }
+  ],
+  "paths": {
+    "/accounts/me": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get business account details.",
+        "operationId": "getAccountInformation",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                  "page_id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "description": "If false the admins of the bot can't access the dashboard."
+                  },
+                  "created": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Timestamp representing the date the bot was created"
+                  },
+                  "total_users": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The total number of contacts."
+                  }
+              }
+            }            
+          }
+        }
+      }
+    },  
+    "/accounts/admins": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get all admins from a business account.",
+        "operationId": "getAccountAdmins",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Admin"
+              }
+            }
+          }
+        }
+      }
+    },  
+    "/accounts/teams": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get all teams from a bot account.",
+        "operationId": "getAccountTeams",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Team"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/tags": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get all tags from a business account.",
+        "operationId": "getAccountTags",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Create a new tag",
+        "operationId": "createTag",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The the new tag ID."
+                }
+              },
+              "example": {
+                "id": 1995
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/tags/{tag_id}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get tag by id",
+        "operationId": "getTagById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Delete a tag",
+        "operationId": "deleteTag",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/tags/name/{tag_name}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get a tag by name",
+        "operationId": "getTagByName",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "tag_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          }
+        }
+      }
+    },
+    "/accounts/flows": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get all flows from a business account.",
+        "operationId": "getAccountFlows",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/custom_fields": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get all custom fields from a business account.",
+        "operationId": "getAccountCustomFields",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "integer",
+                    "description": "0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1)"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Create a custom field",
+        "operationId": "createCustomField",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [          
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "required": true,
+                  "type": "string"
+                },
+                "type": {
+                  "type": "integer",
+                  "required": true,
+                  "enum": [0, 1, 2, 3, 4],
+                  "description":"0 - text | 1 - number | 2 - date | 3 - datetime | 4 - true/false"
+                },
+                "isBotField": {
+                  "type": "boolean",
+                  "default": false,
+                  "required": false
+                },
+                "value": {
+                  "type": "string",
+                  "required": false,
+                  "description":"The value of the bot field. It is ignored for the contact custom field."
+                },
+                "description": {
+                  "type": "string",
+                  "required": false
+                }
+              },
+              "example": {
+                "name": "lead_score",
+                "type": 1
+              }
+            }
+          }
+        ],       
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The ID of the new custom field"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "id": 1995,
+                "name":"lead_score"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/custom_fields/{custom_field_id}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get custom field by id",
+        "operationId": "getCustomFieldById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "custom_field_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "integer",
+                  "description": "0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1)"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/custom_fields/name/{custom_field_name}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get custom field by name",
+        "operationId": "getCustomFieldByName",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "custom_field_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "integer",
+                  "description": "0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1)"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },"/accounts/bot_fields/{bot_field_id}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get bot field value by id",
+        "operationId": "getBFieldValue",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bot_field_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id":{
+                    "type": "integer"
+                },
+                "type": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value":{
+                  "type": "string"
+                }
+              },
+              "example": {
+                "id": 2334,
+                "name": "age",
+                "type": 1,
+                "value": 25
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Set a bot field value",
+        "operationId": "setBField",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bot_field_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "value",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Unset the value of a bot field",
+        "operationId": "removeBField",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bot_field_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/integrations": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Get all integrations from a business account.",
+        "operationId": "getAccountIntegrations",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of available integrations and their status",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "openai": {
+                  "type": "object",
+                  "properties": {
+                    "active": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "gemini": {
+                  "type": "object",
+                  "properties": {
+                    "active": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "claude": {
+                  "type": "object",
+                  "properties": {
+                    "active": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "xai": {
+                  "type": "object",
+                  "properties": {
+                    "active": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "deepseek": {
+                  "type": "object",
+                  "properties": {
+                    "active": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "google_sheets": {
+                  "type": "object",
+                  "properties": {
+                    "active": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "email": {
+                  "type": "object",
+                  "properties": {
+                    "active": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "openai": { "active": true },
+              "gemini": { "active": false },
+              "claude": { "active": true },
+              "xai": { "active": false },
+              "deepseek": { "active": true },
+              "google_sheets": { "active": false },
+              "email": { "active": true }
+            }
+          }
+        }
+      }
+    },    
+    "/contacts/{contact_id}": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Get contact by contact id",
+        "operationId": "getUserByName",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Contact"
+            }
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/contacts/find_by_custom_field": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Find contacts by custom field value. It will return maximum 100 contacts. The results are sorted by the last custom field value update for a contact. ",
+        "operationId": "findByCustomField",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "field_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Custom field ID. Use 'phone' or 'email' as custom field id if you want to find the contact by phone or email"
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {                  
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Contact"
+                    },
+                    "maximum": "100"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters"
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/tags": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Get all tags added to this contact",
+        "operationId": "getUserTags",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/tags/{tag_id}": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Add a tag to the contact",
+        "operationId": "addTagToUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "tag_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "remove a tag from the contact",
+        "operationId": "removeTagFromUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "tag_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Creates a new contact.",
+        "operationId": "createNewContact",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [          
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "phone": {
+                  "required": true,
+                  "type": "string",
+                  "description": "The phone number with country code"
+                },
+                "email": {
+                  "required": false,
+                  "type": "string",
+                  "description": "The contact email"
+                },
+                "first_name": {
+                  "type": "string",
+                  "required": false
+                },
+                "last_name": {
+                  "type": "string",
+                  "required": false
+                },
+                "gender": {
+                  "type": "string",
+                  "required": false,
+                  "enum": [
+                    "male",
+                    "female",
+                    "unknown"
+                  ]
+                },
+                "actions": {
+                  "type": "array",
+                  "required": false,
+                  "description": "Actions can be send flow, add/remove tags, set/unset custom field ..."
+                }
+              },
+              "example": {
+                "phone": "+1234567890",
+                "email":"test@test.com",
+                "first_name": "John",
+                "last_name": "Smith",
+                "gender": "male",
+                "actions":[{"action":"add_tag", "tag_name": "YOU_TAG_NAME"},{"action":"set_field_value", "field_name": "YOU_CUSTOM_FIELD_NAME","value":"ANY_VALUE"},{"action":"send_flow", "flow_id": 11111}]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/custom_fields": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Get all custom fields from a contact",
+        "operationId": "getUserFields",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Custom_field"
+              }
+            }
+          }
+        }
+      }
+    },  
+    "/contacts/{contact_id}/custom_fields/{custom_field_id}": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Get custom field value by id",
+        "operationId": "getFieldValue",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "custom_field_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id":{
+                    "type": "integer"
+                },
+                "type": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value":{
+                  "type": "string"
+                }
+              },
+              "example": {
+                "id": 2334,
+                "name": "age",
+                "type": 1,
+                "value": 25
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Set a contact custom field",
+        "operationId": "addFieldToUser",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "custom_field_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "remove a custom field from the contact",
+        "operationId": "removeFieldFromUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "custom_field_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/send/{flow_id}": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Send a flow to contact",
+        "operationId": "sendFlowToUser",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "flow_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }          
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/send/text": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Send text message to the contact",
+        "operationId": "sendTextMessage",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {                
+                "text":{
+                  "required": true,
+                  "type": "string"
+                },
+                "channel":{
+                  "required": false,
+                  "type": "string",
+                  "enum": ["messenger","whatsapp","sms","webchat","telegram","instagram","viber", "omnichannel"]
+                }               
+              },
+              "example": {
+                "text": "This is a text message",
+                "channel": "messenger"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/send/file": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Send file",
+        "operationId": "sendFile",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {                
+                "url":{
+                  "required": true,
+                  "type": "string"
+                },
+                "type":{
+                  "required": true,
+                  "type": "string",
+                  "enum": ["file","image","audio","video"]
+                },
+                "channel":{
+                  "required": false,
+                  "type": "string",
+                  "enum": ["messenger","sms","whatsapp","googleBM","telegram","instagram","viber", "omnichannel"]
+                }               
+              },
+              "example": {
+                "url": "https://...",
+                "type":"image",
+                "channel": "messenger"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/send_content": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Allows to run multiple actions and send multiple messages. Works for all channels.",
+        "operationId": "sendContent",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {                
+                "messages": {
+                  "type": "array",
+                  "required": false
+                },
+                "actions": {
+                  "type": "array",
+                  "required": false
+                },"channel":{
+                  "required": false,
+                  "type": "string",
+                  "enum": ["messenger","sms","whatsapp","googleBM","telegram","instagram","rcs","viber", "omnichannel"]
+                }
+              },
+              "example": {
+                "messages": [{"message":{"text": "Hello world"}}],
+                "actions": [],
+                "channel": "messenger"
+              }
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/pipelines":{
+      "get": {
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Get list of pipelines",
+        "operationId": "getPipelines",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "description":"Specifies the starting position of the first record to return in a paginated response."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "description":"Sets the maximum number of records to return per request."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data":{
+                    "type": "array",
+                    "items":{
+                      "$ref":"#/definitions/Pipeline"
+                    }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/contacts/{contact_id}/ai/save_messages": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "description": "Save a message to the contact message history (AI)",
+        "operationId": "aiSaveMessages",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [ 
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },         
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "messages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "example": ""
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": ["text", "image", "file", "audio"],
+                        "example": "text"
+                      },
+                      "role": {
+                        "type": "string",
+                        "enum": ["assistant","user", "developer"],
+                        "example": "user"
+                      }
+                    },
+                    "required": ["text", "role"]
+                  }
+                }              
+              },
+              "example": {
+                "messages":[
+                  {"text":"Hi there! How can I assist you today?","type":"text","role":"assistant"}
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/pipelines/{pipeline_id}":{
+      "get": {
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Get list of pipelines",
+        "operationId": "getPipeline",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Pipeline"
+            }
+          }
+        }
+      }
+    },
+    "/pipelines/{pipeline_id}/stages":{
+      "get": {
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Get list of pipeline stages",
+        "operationId": "getPipelineStages",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data":{
+                    "type": "array",
+                    "items":{
+                      "$ref":"#/definitions/PipelineStage"
+                    }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pipelines/{pipeline_id}/custom_fields": {
+      "get": {
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Get all custom fields from a pipeline.",
+        "operationId": "getPipelineCustomFields",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "format": "int64"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pipelines/{pipeline_id}/opportunities": {
+      "get": {
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Get list of opportunities / tickets",
+        "operationId": "pipelinesGetCards",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },          
+          {
+            "name": "contact_id",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "description":"The ID of the contact to filter the opportunities."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "description":"Specifies the starting position of the first record to return in a paginated response."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "description":"Sets the maximum number of records to return per request."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data":{
+                    "type": "array",
+                    "items":{
+                      "$ref":"#/definitions/Opportunity"
+                    }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Creates an opportunity / ticket.",
+        "operationId": "pipelinesAddCard",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contact_id":{
+                  "type": "number",
+                  "required": true
+                },
+                "title": {
+                  "type": "string",
+                  "required": true
+                },
+                "description": {
+                  "type": "string",
+                  "required": false
+                },
+                "stage_id":{
+                  "required": false,
+                  "type": "number",
+                  "description": "if omitted, the the contact is added to first stage."
+                },
+                "value":{
+                  "required": false,
+                  "type": "number",
+                  "default":"0"
+                },
+                "status":{
+                  "required": false,
+                  "type": "string",
+                  "default":"open",
+                  "enum":["open", "won","lost"],
+                  "description": "won is positive and lost is negative"
+                },
+                "priority":{
+                  "required": false,
+                  "type": "string",
+                  "default":"medium",
+                  "enum":["low", "medium","high"]
+                },
+                "assigned_admins":{
+                  "required": false,
+                  "type": "array",
+                  "default": []
+                }           
+              },
+              "example": {
+                "contact_id":"12345678",
+                "title": "This is a test opportunity",
+                "description":"...",
+                "stage_id":12334,
+                "value":300,
+                "status":"open",
+                "priority":"low",
+                "assigned_admins":[55446563],
+                "custom_fields": [
+                  {
+                    "id": 1234,
+                    "value": "Any data"
+                  }                  
+                ]
+              }
+            },
+            "description": "Creates an opportunity / ticket"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties":{
+                "data":{
+                  "type":"array",
+                  "items": {
+                    "$ref": "#/definitions/Opportunity"
+                  }
+                }
+              }             
+            }
+          }
+        }
+      }
+    },
+    "/pipelines/{pipeline_id}/opportunities/{opportunity_id}":{
+      "get": {
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Get an opportunity / ticket",
+        "operationId": "pipelinesGetCard",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "opportunity_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Opportunity"
+            }
+          }
+        }
+      },
+      "post":{
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Updates an opportunity / ticket.",
+        "operationId": "pipelinesUpdateCard",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "opportunity_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {               
+                "title": {
+                  "type": "string",
+                  "required": true
+                },
+                "description": {
+                  "type": "string",
+                  "required": false
+                },
+                "stage_id":{
+                  "required": false,
+                  "type": "number",
+                  "description": "if omitted, the the contact is added to first stage."
+                },
+                "value":{
+                  "required": false,
+                  "type": "number",
+                  "default":"0"
+                },
+                "status":{
+                  "required": false,
+                  "type": "string",
+                  "default":"open",
+                  "enum":["open", "won","lost"],
+                  "description": "won is positive and lost is negative"
+                },
+                "priority":{
+                  "required": false,
+                  "type": "string",
+                  "default":"medium",
+                  "enum":["low", "medium","high"]
+                },
+                "assigned_admins":{
+                  "required": false,
+                  "type": "array",
+                  "default": []
+                }           
+              },
+              "example": {
+                "title": "This is a test opportunity",
+                "description":"...",
+                "stage_id":12334,
+                "value":300,
+                "status":"open",
+                "priority":"low",
+                "assigned_admins":[55446563],
+                "custom_fields": [
+                  {
+                    "id": 1234,
+                    "value": "Any data"
+                  },
+                  {
+                    "name": "Age",
+                    "value": 30
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      },
+      "delete":{
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Delete an opportunity / ticket",
+        "operationId": "pipelinesDeleteCard",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "opportunity_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+
+    },
+    "/pipelines/{pipeline_id}/opportunities/{opportunity_id}/transfer-to-pipeline":{
+      "post":{
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Transfer an opportunity / ticket to another pipeline.",
+        "operationId": "pipelinesTransferCard",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "opportunity_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {               
+                "target_pipeline_id":{
+                  "required": true,
+                  "type": "number"
+                },
+                "target_stage_id":{
+                  "required": true,
+                  "type": "number"
+                }
+              },
+              "example": {
+                "target_pipeline_id": 123456,
+                "target_stage_id": 654321
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pipelines/{pipeline_id}/opportunities/{opportunity_id}/comments":{
+      "get": {
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Get list of comments of an opportunity / ticket",
+        "operationId": "pipelinesGetComments",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "opportunity_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "description":"Specifies the starting position of the first record to return in a paginated response."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "description":"Sets the maximum number of records to return per request."
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties":{
+                "data":{
+                  "type":"array",
+                  "items": {
+                    "$ref": "#/definitions/OpportunityComment"
+                  }
+                }
+              }             
+            }
+          }
+        }
+      },
+      "post":{
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Creates a new comment on an opportunity / ticket.",
+        "operationId": "pipelinesAddComment",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "opportunity_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {               
+                "content": {
+                  "type": "string",
+                  "required": true
+                }        
+              },
+              "example": {
+                "content": "This is a comment"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OpportunityComment"
+            }
+          }
+        }
+      }
+    },
+    "/pipelines/{pipeline_id}/opportunities/{opportunity_id}/comments/{comment_id}":{
+      "delete":{
+        "tags": [
+          "Pipelines"
+        ],
+        "description": "Delete a comment of an opportunity / ticket",
+        "operationId": "pipelinesDeleteComment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pipeline_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "opportunity_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "comment_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents/": {
+      "get": {
+        "tags": [
+          "AI Agents"
+        ],
+        "description": "Get list of AI agents",
+        "operationId": "getAIAgents",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {                  
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Agent"
+                    },
+                    "maximum": "100"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters"
+          }
+        }
+      }
+    },
+    "/agents/{agent_id}": {
+      "get": {
+        "tags": [
+          "AI Agents"
+        ],
+        "description": "Get AI agent by id",
+        "operationId": "getAIById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Agent"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "AI Agents"
+        ],
+        "description": "Update AI agent by id",
+        "operationId": "updateAIById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          },
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {                
+                "prompt": {
+                  "type": "string",
+                  "required": false,
+                  "description":"The prompt field for the AI agent"
+                },
+                "max_output_tokens": {
+                  "type": "number",
+                  "required": false,
+                  "description":"The max_output_tokens field for the AI agent"
+                },
+                "model":{
+                  "type": "object",
+                  "required": false,
+                  "properties": {
+                    "openAI": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "gemini": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "claude": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "xAI": {
+                      "type": "string",
+                      "required": true
+                    },
+                     "deepseek": {
+                      "type": "string",
+                      "required": true
+                    }                    
+                  }
+                }
+              },
+              "example": {
+                "prompt": "Your prompt here"
+              }
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Agent"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    
+    "/agents/functions": {
+      "get": {
+        "tags": [
+          "AI Agents"
+        ],
+        "description": "Get list of AI Functions",
+        "operationId": "getAIFunctions",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {                  
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "number"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "created_by":{
+                                "type": "number"
+                            },
+                            "created_at": {
+                                "type": "string",
+                                "format": "date-time"                              
+                            }
+                        }
+                    }
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/agents/mcp": {
+      "get": {
+        "tags": [
+          "AI Agents"
+        ],
+        "description": "Get list of AI MCPs",
+        "operationId": "getAIMCPs",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {                  
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "number"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "created_by":{
+                                "type": "number"
+                            },
+                            "created_at": {
+                                "type": "string",
+                                "format": "date-time"                              
+                            }
+                        }
+                    }
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/agents/files": {
+      "get": {
+        "tags": [
+          "AI Agents"
+        ],
+        "description": "Get list of AI Files",
+        "operationId": "getAIFiles",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {                  
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "number"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "size": {
+                                "type": "number"
+                            },
+                            "url": {
+                                "type": "string"
+                            },
+                            "created_by":{
+                                "type": "number"
+                            },
+                            "created_at": {
+                                "type": "string",
+                                "format": "date-time"                              
+                            }
+                        }
+                    }
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/accounts/templates/{template_id}/install":{
+      "post": {
+        "tags": [
+          "Templates"
+        ],
+        "description": "Install a template to your account",
+        "operationId": "installTemplate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description":"You can get template ID from the template link."
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "template_key": {
+                  "required": true,
+                  "type": "string",
+                  "description": "The template key from the template link."
+                }
+              },
+              "example": {
+                "template_key": "asa823mkAkdk394kdsjs"
+              }
+            }
+          }
+        ],     
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/templates/{template_id}/generateSingleUseLink": {
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "Generate single-use template link",
+        "operationId": "generateTemplateLink",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description":"You can get template ID from the template link"
+          }
+        ],     
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "link": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "link": "https://..."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calendars": {
+      "get": {
+        "tags": [
+          "Appointment Management"
+        ],
+        "description": "Get list of calendars",
+        "operationId": "getCalendars",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {                  
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Calendar"
+                    },
+                    "maximum": "100"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters"
+          }
+        }
+      }
+    },
+    "/calendars/{calendar_id}": {
+      "get": {
+        "tags": [
+          "Appointment Management"
+        ],
+        "description": "Get product by id",
+        "operationId": "getProductById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "calendar_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Calendar"
+            }
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/send/products": {
+      "post": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "Send a product message to the contact",
+        "operationId": "sendProduct",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {                
+                "product_id": {
+                  "type": "array",
+                  "required": true,
+                  "description":"The product_id  field could be a single product id, an array of product ids, or multiple product ids separated by a comma"
+                }
+              },
+              "example": {
+                "product_id": [1111,222,3333]
+              }
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/cart": {
+      "get": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "Get the contact cart ready for checkout",
+        "operationId": "getUserCart",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "Clear the contact cart",
+        "operationId": "clearUserCart",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/pay/{order_id}": {
+      "post": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "Mark an order as Paid.",
+        "operationId": "payOrder",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "amount_received",
+            "in": "formData",
+            "required": true,
+            "type": "integer",
+            "description": "Total value the contact paid in cents."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          },
+          "400": {
+            "description": "The amount received is less than the total value of the order."
+          },
+          "402": {
+            "description": "The contact received a message on Messenger why the checkout failed."
+          },
+          "404": {
+            "description": "The order ID doesn't existe"
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/order/{order_id}": {
+      "get": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "Get order information",
+        "operationId": "getUserOrder",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "Change order status.",
+        "operationId": "changeOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status":{
+                  "name": "status",
+                  "in": "formData",
+                  "required": false,
+                  "type": "integer",
+                  "enum": [6,7,10,13],
+                  "description": "The new order status. 6 - Processing, 7 - Shipped, 10 - Completed, 13 - Canceled."
+                },
+                "name": {
+                  "required": false,
+                  "type": "string",
+                  "name": "The name for the shipping"
+                },
+                "phone": {
+                  "required": false,
+                  "type": "string",
+                  "name": "The phone for the shipping"
+                },  
+                "email": {
+                  "required": false,
+                  "type": "string",
+                  "name": "The email for the shipping"
+                },
+                "country":{
+                  "required": false,
+                  "type": "string",
+                  "name": "The country for the shipping"
+                },
+                "state":{
+                  "required": false,
+                  "type": "string",
+                  "name": "The state for the shipping"
+                },
+                "city":{
+                  "required": false,
+                  "type": "string",
+                  "name": "The city for the shipping"
+                },
+                "zip_code":{
+                  "required": false,
+                  "type": "string",
+                  "name": "The zip code for the shipping"
+                },
+                "address":{
+                  "required": false,
+                  "type": "string",
+                  "name": "The address for the shipping"
+                },
+                "street_1":{
+                  "required": false,
+                  "type": "string",
+                  "name": "The street_1 for the shipping"
+                },
+                "street_2": {
+                  "required": false,
+                  "type": "string",
+                  "name": "The street_2 for the shipping"
+                },
+                "note": {
+                  "required": false,
+                  "type": "string",
+                  "name": "Note related to the order."
+                }
+
+              },
+              "example": {
+                "status": 7
+              }
+            }
+          }
+          
+          
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          },
+          "400": {
+            "description": "Order status must be 6, 7, 10, or 13"
+          },
+          "402": {
+            "description": "The order status is the same as the previous status"
+          },
+          "404": {
+            "description": "The order ID doesn't existe"
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/cart/{product_id}": {
+      "post": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "Add a product to contact cart",
+        "operationId": "addProductCart",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "quantity",
+            "in": "formData",
+            "required": true,
+            "type": "integer",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "remove a product from contact cart",
+        "operationId": "removeProductCart",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{product_id}": {
+      "get": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "Get product by id",
+        "operationId": "getProductById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ecommerce"
+        ],
+        "description": "Update product.",
+        "operationId": "updateProduct",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [      
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },    
+          {
+            "name": "content",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "price": {
+                  "required": false,
+                  "type": "number"
+                },
+                "active": {
+                  "required": false,
+                  "type": "boolean",
+                  "description": "if contacts can buy the product."
+                },
+                "stock": {
+                  "type": "number",
+                  "required": false
+                }
+              },
+              "example": {
+                "active": false,
+                "stock":500,
+                "price":40
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "updated": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "success": true,
+                "updated": true
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "APIKeyHeader": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-ACCESS-TOKEN"
+    }
+  },
+  "definitions": {
+    "Cart": {
+      "type": "object",
+      "description": "All value related to money is in cents",
+      "properties": {
+        "order_id": {
+          "type": "string"
+        },
+        "page_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The contact ID"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "subtotal": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "total_items": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "coupon_discount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "coupon": {
+          "type": "string"
+        },
+        "line_items": {
+          "type": "array",
+          "xml": {
+            "name": "line_items",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ProductCart"
+          }
+        },
+        "contact": {
+          "$ref": "#/definitions/Contact"
+        }
+      },
+      "xml": {
+        "name": "cart"
+      }
+    },
+    "Order": {
+      "type": "object",
+      "description": "All value related to money is in cents",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "page_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The contact ID"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "Subscribed date in UTC. Example 2022-10-12 14:40:00"
+        },
+        "created_timestamp": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Date of the order in epoch/Unix timestamp"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "subtotal": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "shipping_cost": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "total_taxes": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "total_discounts": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "total_items": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "coupon_discount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "coupon": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "Not processed",
+            "Accepted",
+            "Delivering",
+            "Completed",
+            "Canceled"
+          ]
+        },
+        "line_items": {
+          "type": "array",
+          "xml": {
+            "name": "line_items",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ProductCart"
+          }
+        },
+        "contact": {
+          "$ref": "#/definitions/Contact"
+        }
+      },
+      "xml": {
+        "name": "cart"
+      }
+    },
+    "ProductCart": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "img": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double",
+          "description": "the price is not in cents"
+        },
+        "amount": {
+          "type": "integer",
+          "description": "quantity"
+        },
+        "descr_min": {
+          "type": "string"
+        },"manufacturer": {
+          "type": "integer",
+          "description": "The vendor ID"
+        },"variant": {
+          "type": "string"
+        },"user_msg": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "ProductCart"
+      }
+    },
+    "Custom_field": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "integer",
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "description": "0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1), 5- Long Text, 6 - Select, 7 - Multi Select"
+        },
+        "value": {
+          "type": "string",
+          "description": "type == 0 then value is string, else value is a number"
+        }        
+      },
+      "xml": {
+        "name": "Custom_field"
+      }
+    },
+    "Admin": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "email": {
+          "type": "string"
+        },"first_name": {
+          "type": "string"
+        },"last_name": {
+          "type": "string"
+        },"full_name": {
+          "type": "string"
+        },"profile_pic": {
+          "type": "string"
+        },
+        "available": {
+          "type": "boolean",
+          "description": "Whether the admin has the availability status set on/off."
+        }
+      },
+      "xml": {
+        "name": "Tag"
+      }
+    },
+    "Team": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Team"
+      }
+    },
+    "Tag": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Tag"
+      }
+    },
+    "Pipeline": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Pipeline"
+      }
+    },
+    "PipelineStage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "PipelineStage"
+      }
+    },
+    "OpportunityComment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "int64"
+        },
+        "data": {
+          "type": "string"
+        },
+        "created_at":{
+          "type": "string",
+          "example": "2028-02-08 12:34:56",
+          "description":"UTC"
+        },
+        "created_by": {
+          "type": "number",
+          "description":"Admin ID"
+        }
+      },
+      "xml": {
+        "name": "OpportunityComment"
+      }
+    },    
+    "Opportunity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "contact_id": {
+          "type": "number"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "object",
+          "properties":{
+            "id": {
+              "type": "number"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "assigned_admins":{
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "created_at":{
+          "type": "string",
+          "example": "2028-02-08 12:34:56",
+          "description":"UTC"
+        },
+        "created_by": {
+          "type": "number",
+          "description":"Admin ID"
+        },
+        "updated_at":{
+          "type": "string",
+          "example": "2028-02-08 12:34:56",
+          "description":"UTC"
+        },
+        "updated_by": {
+          "type": "number",
+          "description":"Admin ID"
+        }        
+      },
+      "xml": {
+        "name": "Opportunity"
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "sale_price": {
+          "type": "number",
+          "format": "double"
+        },
+        "category_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "category_name": {
+          "type": "string"
+        },
+        "stock": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "short_description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "Subscribed date in UTC. Example 2022-10-12 14:40:00"
+        }
+      },
+      "xml": {
+        "name": "Product"
+      }
+    },
+     "Calendar": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "number",
+          "format": "int64"
+        },
+        "created_by": {
+          "type": "number",
+          "format": "int64"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date in UTC. Example 2022-10-12 14:40:00"
+        }
+      },
+      "xml": {
+        "name": "Calendar"
+      }
+    },
+    "Agent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },        
+        "created_by": {
+          "type": "number",
+          "format": "int64"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date in UTC. Example 2022-10-12 14:40:00"
+        }
+      },
+      "xml": {
+        "name": "Agent"
+      }
+    },
+    "Appointment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "contact_id": {
+          "type": "number",
+          "format": "int64"
+        },
+        "calendar_id": {
+          "type": "number",
+          "format": "int64"
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the appointment starts. Date in UTC. Example 2022-10-12 14:40:00"
+        },
+        "end_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the appointment ends. Date in UTC. Example 2022-10-12 14:40:00"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["PENDING", "CONFIRMED", "DONE", "CANCELED"]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date in UTC. Example 2022-10-12 14:40:00"
+        }
+      },
+      "xml": {
+        "name": "Appointment"
+      }
+    },
+    "Contact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "page_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "channel": {
+          "type": "integer",
+          "description": "0 - Messenger, 2 - SMS, 5 - WhatsApp, 7 - Google Business Message, 8 - Telegram, 9 - Webchat"
+        },
+        "profile_pic": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "integer",
+          "description": "0 - Female, 1 - Male, 2 - Unknown"
+        },
+        "timezone": {
+          "type": "integer"
+        },
+        "last_sent": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Unix timestamp in milliseconds"
+        },
+        "last_delivered": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Unix timestamp in milliseconds"
+        },
+        "last_seen": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Unix timestamp in milliseconds"
+        },
+        "last_interaction": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Unix timestamp in milliseconds"
+        },
+        "subscribed_date": {
+          "type": "string",
+          "description": "Subscribed date in UTC. Example 2022-10-12 14:40:00"
+        },
+        "subscribed": {
+          "type": "integer",
+          "description": "1 - Subscribed, 2 - Unsubscribed"
+        },
+        "tags": {
+          "type": "array",
+          "xml": {
+            "name": "tag",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
+        },
+        "custom_fields": {
+          "type": "array",
+          "xml": {
+            "name": "tag",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/Custom_field"
+          }
+        }
+      },
+      "xml": {
+        "name": "Contact"
+      }
+    },
+    "Account": {
+      "type": "object", 
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },"name": {
+          "type": "string"
+        },"fb_page_id": {
+          "type": "integer",
+          "format": "int64"
+        },"instagram_id": {
+          "type": "integer",
+          "format": "int64"
+        },"waba_id": {
+          "type": "integer",
+          "format": "int64"
+        },"wa_phone_id": {
+          "type": "integer",
+          "format": "int64"
+        },"viber_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "active": {
+          "type": "integer",
+          "enum": [0, 1],
+          "description": "0 - False, 1 True"
+        },"plan": {
+          "type": "integer",
+          "enum": [1, 4, 6, 13, 15],
+          "description": "1 - Pro Subscription, 4 - FREE, 6 - Pro No Subscription, 11 - LTD, 12 - LTD, 13 - PRO Trial - Downgrade to FREE at the end, 15 - PRO Trial - Force to pay at the end"
+        },
+        "created": {
+          "type": "string",
+          "description": "The date (UTC) when the account was created"
+        }
+      },
+      "xml": {
+        "name": "Account"
+      }
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "host": "app.replyr.ai/api",
+  "basePath": "/"
+}

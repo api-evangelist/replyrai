@@ -1,0 +1,344 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/replyrai-platform-api-swagger.json
+note: >-
+  Entity graph derived from the 17 definitions in the provider's Swagger 2.0
+  document plus the $ref links and id-reference fields in its operations. Replyr
+  publishes no object reference page, so no id prefixes or domain notes could be
+  searched; identifiers are bare integers (and one string on Order) with no
+  prefix scheme.
+
+identifiers:
+  scheme: bare-integer
+  prefixes: []
+  detail: >-
+    Almost every entity uses a bare numeric id. Order.id and Cart.order_id are
+    strings. Because ids carry no type prefix, an id alone does not say what it
+    identifies, and a client cannot validate that it is passing a tag id where a
+    tag id is expected.
+  tenancy_field: page_id
+  tenancy_detail: >-
+    Account, Contact, Cart and Order all carry page_id, which is the account /
+    business scope. It derives from the platform's Facebook-page origin and is
+    the de facto tenant key across the model.
+
+entities:
+- name: Account
+  description: The business account (a bot / page) that owns everything else.
+  operations:
+  - getAccountInformation
+  key: id
+  fields_of_note:
+  - name: page_id
+    note: Tenant scope repeated on child entities.
+  - name: fb_page_id
+    note: Connected Facebook page.
+  - name: instagram_id
+    note: Connected Instagram account.
+  - name: waba_id
+    note: Connected WhatsApp Business Account.
+  - name: wa_phone_id
+    note: Connected WhatsApp phone number.
+  - name: viber_id
+    note: Connected Viber account.
+  - name: plan
+    note: Integer plan identifier; no plan catalog is published to resolve it.
+  relationships:
+  - type: has_many
+    target: Admin
+    via: getAccountAdmins
+  - type: has_many
+    target: Team
+    via: getAccountTeams
+  - type: has_many
+    target: Tag
+    via: getAccountTags
+  - type: has_many
+    target: Custom_field
+    via: getAccountCustomFields
+  - type: has_many
+    target: Contact
+    via: page_id
+  - type: has_many
+    target: Pipeline
+    via: getPipelines
+  - type: has_many
+    target: Agent
+    via: getAIAgents
+  - type: has_many
+    target: Calendar
+    via: getCalendars
+
+- name: Contact
+  description: An end person reachable on a connected chat channel. The center of the model.
+  operations:
+  - getUserByName
+  - findByCustomField
+  - createNewContact
+  key: id
+  fields_of_note:
+  - name: channel
+    note: Integer channel discriminator; no enum or lookup is published.
+  - name: page_id
+    note: Owning account.
+  - name: gender
+    note: Integer on the Contact definition but a male/female/unknown string enum on the createNewContact body - an inconsistency in the published contract.
+  - name: last_sent, last_delivered, last_seen, last_interaction
+    note: Engagement timestamps as integers.
+  relationships:
+  - type: belongs_to
+    target: Account
+    via: page_id
+  - type: has_many
+    target: Tag
+    via: getUserTags
+  - type: has_many
+    target: Custom_field
+    via: getUserFields
+  - type: has_one
+    target: Cart
+    via: getUserCart
+  - type: has_many
+    target: Order
+    via: getUserOrder
+  - type: has_many
+    target: Opportunity
+    via: contact_id
+  - type: has_many
+    target: Appointment
+    via: contact_id
+
+- name: Tag
+  description: A label applied to contacts. Addressable by id or by name.
+  operations: [getAccountTags, createTag, getTagById, getTagByName, deleteTag]
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Account
+  - type: has_many
+    target: Contact
+    via: addTagToUser / removeTagFromUser
+
+- name: Custom_field
+  description: An account-defined field whose value is set per contact. Addressable by id or name.
+  operations: [getAccountCustomFields, createCustomField, getCustomFieldById, getCustomFieldByName]
+  key: id
+  fields_of_note:
+  - name: type
+    note: Integer field type; no type enum is published.
+  relationships:
+  - type: belongs_to
+    target: Account
+  - type: has_many
+    target: Contact
+    via: addFieldToUser / removeFieldFromUser
+
+- name: Admin
+  description: A human operator on the account.
+  operations: [getAccountAdmins]
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Account
+  - type: has_many
+    target: Opportunity
+    via: assigned_admins
+
+- name: Team
+  description: A grouping of admins.
+  operations: [getAccountTeams]
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Account
+
+- name: Pipeline
+  description: A sales / ticketing pipeline.
+  operations: [getPipelines, getPipeline]
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Account
+  - type: has_many
+    target: PipelineStage
+    via: getPipelineStages
+  - type: has_many
+    target: Opportunity
+    via: pipelinesGetCards
+  - type: has_many
+    target: Custom_field
+    via: getPipelineCustomFields
+
+- name: PipelineStage
+  description: A named stage within a pipeline.
+  operations: [getPipelineStages]
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Pipeline
+
+- name: Opportunity
+  description: A deal or ticket moving through a pipeline. Called an opportunity / card interchangeably.
+  operations: [pipelinesGetCards, pipelinesAddCard, pipelinesGetCard, pipelinesUpdateCard, pipelinesDeleteCard, pipelinesTransferCard]
+  key: id
+  fields_of_note:
+  - name: stage
+    note: Embedded object rather than a stage_id reference.
+  - name: assigned_admins
+    note: Array of admin references.
+  - name: created_by, updated_by
+    note: Admin ids.
+  relationships:
+  - type: belongs_to
+    target: Pipeline
+  - type: belongs_to
+    target: Contact
+    via: contact_id
+  - type: has_one
+    target: PipelineStage
+    via: stage
+  - type: has_many
+    target: OpportunityComment
+    via: pipelinesGetComments
+  - type: has_many
+    target: Admin
+    via: assigned_admins
+
+- name: OpportunityComment
+  description: A comment on an opportunity.
+  operations: [pipelinesGetComments, pipelinesAddComment, pipelinesDeleteComment]
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Opportunity
+  - type: belongs_to
+    target: Admin
+    via: created_by
+
+- name: Agent
+  description: An AI agent configured on the account.
+  operations: [getAIAgents, getAIById, updateAIById]
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Account
+  - type: belongs_to
+    target: Admin
+    via: created_by
+  side_surfaces:
+  - operation: getAIFunctions
+    note: Tool/function definitions available to agents. No schema definition is published.
+  - operation: getAIMCPs
+    note: MCP connections configured for agents. No schema definition is published.
+  - operation: getAIFiles
+    note: Knowledge files attached to agents. No schema definition is published.
+
+- name: Calendar
+  description: An appointment calendar with a slot duration.
+  operations: [getCalendars, getProductById]
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Account
+  - type: has_many
+    target: Appointment
+    via: calendar_id
+  note: >-
+    GET /calendars/{calendar_id} reuses the operationId getProductById, which is
+    also used by GET /products/{product_id}. The specification therefore contains
+    a duplicate operationId across two unrelated resources - a generated client
+    will collide on it.
+
+- name: Appointment
+  description: A booked slot on a calendar for a contact.
+  operations: []
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Calendar
+    via: calendar_id
+  - type: belongs_to
+    target: Contact
+    via: contact_id
+  note: >-
+    Defined in the schema but reachable through no published operation - there is
+    no list, create, reschedule or cancel endpoint for appointments, even though
+    booking appointments is the product's headline use case.
+
+- name: Product
+  description: A catalog item that can be sent to a contact and added to a cart.
+  operations: [getProductById, updateProduct, sendProduct]
+  key: id
+  relationships:
+  - type: has_many
+    target: ProductCart
+    via: line_items
+
+- name: ProductCart
+  description: A line item - a product with quantity, price and variant as carted.
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Cart
+    via: line_items
+  - type: belongs_to
+    target: Product
+
+- name: Cart
+  description: A contact's pre-checkout cart.
+  operations: [getUserCart, addProductCart, removeProductCart, clearUserCart]
+  key: order_id
+  relationships:
+  - type: belongs_to
+    target: Contact
+    via: user_id
+  - type: belongs_to
+    target: Account
+    via: page_id
+  - type: has_many
+    target: ProductCart
+    via: line_items
+  note: Cart is keyed by order_id, so a cart and its resulting order share an identifier.
+
+- name: Order
+  description: A checked-out cart with status, totals, taxes, shipping and discounts.
+  operations: [getUserOrder, changeOrder, payOrder]
+  key: id
+  relationships:
+  - type: belongs_to
+    target: Contact
+    via: user_id
+  - type: belongs_to
+    target: Account
+    via: page_id
+  - type: has_many
+    target: ProductCart
+    via: line_items
+
+relationships_summary:
+  entities: 17
+  root: Account
+  hub: Contact
+  orphans:
+  - Appointment
+  detail: >-
+    Account is the tenant root and Contact is the hub - 21 of 65 operations are
+    addressed by contact_id. Appointment is defined but unreachable. Flows, bot
+    fields, templates and integrations are exposed as operations but have no
+    schema definition, so their shapes are undocumented.
+
+undefined_shapes:
+- name: Flow
+  operations: [getAccountFlows, sendFlowToUser]
+- name: BotField
+  operations: [getBFieldValue, setBField, removeBField]
+- name: Integration
+  operations: [getAccountIntegrations]
+- name: Template
+  operations: [installTemplate, generateTemplateLink]
+- name: AIFunction
+  operations: [getAIFunctions]
+- name: AIMCP
+  operations: [getAIMCPs]
+- name: AIFile
+  operations: [getAIFiles]

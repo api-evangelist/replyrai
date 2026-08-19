@@ -1,0 +1,52 @@
+generated: '2026-08-13'
+method: probed
+source: live HTTPS probes of every host named in apis.yml and the OpenAPI host
+note: >-
+  Every /.well-known/ path was probed on both the marketing host (replyr.ai) and
+  the API/console host (app.replyr.ai). Every path returned 404 and no document
+  was served, so NO WellKnown or SecurityTxt pointer is wired in apis.yml. This
+  file records a measured absence, not a presence.
+hosts:
+- host: https://replyr.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://app.replyr.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+summary:
+  hosts_probed: 2
+  paths_probed: 16
+  documents_found: 0
+x-evidence:
+  fetched: '2026-08-13'
+  method: HTTPS GET, redirects followed

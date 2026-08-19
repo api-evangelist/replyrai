@@ -1,0 +1,89 @@
+generated: '2026-08-13'
+method: searched
+source: openapi/replyrai-platform-api-swagger.json
+docs: https://app.replyr.ai/api
+note: >-
+  Baseline derived by derive-authentication.py from the provider's Swagger 2.0
+  securityDefinitions, then upgraded with the live behaviour observed against
+  https://app.replyr.ai/api/accounts/me on 2026-08-13. Replyr publishes no prose
+  authentication guide - the Swagger UI at https://app.replyr.ai/api is the whole
+  reference - so token issuance, rotation and revocation are undocumented.
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+  oauth2: false
+  openid_connect: false
+  mutual_tls: false
+  scopes: none
+  multi_factor: false
+schemes:
+- name: APIKeyHeader
+  type: apiKey
+  in: header
+  parameter: X-ACCESS-TOKEN
+  applied: global
+  operations_covered: 65
+  issuance: >-
+    From the Replyr operator console at https://app.replyr.ai. Not documented in
+    the reference; there is no self-serve sign-up route
+    (https://app.replyr.ai/en/register returns 404), so a key follows a sales
+    conversation.
+  rotation_policy: not published
+  revocation_policy: not published
+  expiry: not published
+  sources:
+  - openapi/replyrai-platform-api-swagger.json
+authorization:
+  model: all-or-nothing
+  scopes: []
+  detail: >-
+    There is no scope, permission or role surface on the API. One account key
+    authorizes all 65 operations, including operations with external
+    consequences - sending messages to real end users on WhatsApp and other
+    channels (sendTextMessage, sendFile, sendFlowToUser, sendContent,
+    sendProduct), deleting pipeline data (pipelinesDeleteCard), and changing
+    order payment state (payOrder, changeOrder). A key issued for a read-only
+    integration cannot be restricted to reads.
+  tenancy: >-
+    Keys are account-scoped. page_id on Account, Contact, Cart and Order is the
+    tenant key; the API exposes no cross-account operation.
+failure_behavior:
+  status: 401
+  body: '{"error":{"code":401,"message":"No valid API key provided."}}'
+  content_type: text/html; charset=UTF-8
+  www_authenticate_header: false
+  detail: >-
+    Identical response for a missing header, a malformed token and a
+    syntactically valid but invalid token - the three cases cannot be
+    distinguished by a client. The same 401 is also returned for /api/* paths
+    that do not exist, so a 401 does not confirm an operation exists. No
+    WWW-Authenticate challenge header is sent, so the response is not
+    self-describing to a generic HTTP client.
+transport:
+  https_required: true
+  tls_version: TLSv1.3
+  hsts: false
+  hsts_detail: >-
+    app.replyr.ai - the host carrying both the API and the authenticated console -
+    does not send Strict-Transport-Security, though the marketing host replyr.ai
+    does. See security/replyrai-domain-security.yml.
+discovery:
+  openid_configuration: 404
+  oauth_authorization_server: 404
+  oauth_protected_resource: 404
+  detail: See well-known/replyrai-well-known.yml - 16 paths probed, 0 documents.
+x-evidence:
+  fetched: '2026-08-13'
+  probes:
+  - url: https://app.replyr.ai/api/accounts/me
+    request: no auth header
+    status: 401
+  - url: https://app.replyr.ai/api/accounts/me
+    request: X-ACCESS-TOKEN with an invalid value
+    status: 401
+    note: Identical body to the no-header case.
+  - url: https://app.replyr.ai/api
+    status: 200
+    note: Swagger UI reference page.

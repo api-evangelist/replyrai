@@ -1,0 +1,51 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  npm registry search, PyPI, GitHub org lookup, and the Replyr API reference at
+  https://app.replyr.ai/api
+note: >-
+  No first-party Replyr client library was found in any public registry. The
+  Swagger UI at https://app.replyr.ai/api documents raw HTTP calls only and links
+  no SDK. The npm package named "replyr" is an unrelated Node.js MQTT client, not
+  a Replyr.ai product, and is recorded below as an explicit non-match so a later
+  pass does not mistake it for a first-party SDK. github.com/replyr exists but is
+  an empty organization (0 public repositories, no name, blog, description or
+  email) created 2021-07-03, and cannot be attributed to Replyr Sdn Bhd on the
+  available evidence, so no GitHubOrganization pointer is wired.
+packages: []
+package_count: 0
+official_sdk_count: 0
+non_matches:
+- registry: npm
+  name: replyr
+  url: https://www.npmjs.com/package/replyr
+  description: Node.js MQTT client with built-in request and response methods
+  official: false
+  reason: >-
+    Unrelated project. Not published by Replyr Sdn Bhd and does not wrap the
+    Replyr Platform API.
+  version: null
+registries_searched:
+- registry: npm
+  query: replyr
+  url: https://registry.npmjs.org/-/v1/search?text=replyr
+  first_party_hits: 0
+- registry: pypi
+  name: replyr
+  url: https://pypi.org/pypi/replyr/json
+  status: 404
+  first_party_hits: 0
+- registry: github
+  org: replyr
+  url: https://api.github.com/orgs/replyr
+  status: 200
+  public_repos: 0
+  first_party_hits: 0
+- registry: github
+  org: replyr-ai
+  status: 404
+  first_party_hits: 0
+- registry: github
+  org: replyrai
+  status: 404
+  first_party_hits: 0

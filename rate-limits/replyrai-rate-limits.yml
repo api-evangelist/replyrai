@@ -1,0 +1,56 @@
+generated: '2026-08-13'
+method: probed
+source: >-
+  https://app.replyr.ai/api (Swagger UI + Swagger 2.0 document) and live
+  unauthenticated responses from https://app.replyr.ai/api/accounts/me
+note: >-
+  Replyr documents no rate limits, and no runtime rate-limit signal was observed.
+  The specification declares no 429 response on any of its 65 operations, and no
+  RateLimit-*, X-RateLimit-* or Retry-After header appeared on any observed
+  response. An agent calling this API has no way to discover its budget in
+  advance and no way to learn it has been throttled other than by a failure it
+  cannot classify.
+limit_count: 0
+limits: []
+headers:
+  published: []
+  observed: []
+  detail: >-
+    Response headers observed on live calls were limited to server (nginx/1.23.3),
+    date, content-type, via and alt-svc. No rate-limit family header of any kind.
+status_on_exhaustion: null
+status_on_exhaustion_detail: >-
+  Undocumented. No 429 response is declared anywhere in the specification, and
+  the API's only observed error status is 401.
+retry_guidance:
+  published: false
+  retry_after_header: false
+  backoff_documented: false
+quotas:
+  published: false
+  detail: >-
+    No per-key, per-account or per-endpoint quota is published. The Account
+    object exposes an integer `plan` field, but no plan catalog exists to map it
+    to entitlements or limits.
+implicit_caps:
+- operation: findByCustomField
+  cap: 100 contacts per response
+  source: response schema maximum in the specification
+  note: >-
+    Not a rate limit but a hard result cap with no pagination parameters, so a
+    result set larger than 100 cannot be fully retrieved.
+- operation: getAIAgents
+  cap: 100 items per response
+  source: response schema maximum in the specification
+- operation: getPipelines / pipelinesGetCards / pipelinesGetComments
+  cap: default limit 100 per page
+  source: limit query parameter default
+  note: These three are genuinely paginated via offset/limit.
+x-evidence:
+  checked: '2026-08-13'
+  probes:
+  - url: https://app.replyr.ai/api/accounts/me
+    status: 401
+    rate_limit_headers: none
+  - url: https://app.replyr.ai/api
+    status: 200

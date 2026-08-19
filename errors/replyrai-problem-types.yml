@@ -1,0 +1,152 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/replyrai-platform-api-swagger.json (4xx/5xx responses), plus a live
+  unauthenticated probe of https://app.replyr.ai/api/accounts/me
+docs: https://app.replyr.ai/api
+format: vendor-json
+rfc9457: false
+note: >-
+  Replyr publishes no error reference page. The catalog below is derived from the
+  4xx responses declared in the provider's own Swagger 2.0 document, plus the 401
+  envelope observed live. Descriptions are quoted verbatim from the specification,
+  including its typos, so this file stays a faithful record of what the provider
+  published rather than a cleaned-up rewrite.
+
+envelope:
+  shape: '{"error": {"code": <int>, "message": <string>}}'
+  fields:
+  - name: error.code
+    type: integer
+    description: Repeats the HTTP status code.
+  - name: error.message
+    type: string
+    description: Human-readable message. Not a stable machine-parsable identifier.
+  content_type: text/html; charset=UTF-8
+  content_type_note: >-
+    Observed responses carry a JSON body under an HTML content type, so clients
+    must parse on shape rather than on the declared media type.
+  problem_json: false
+  type_uris: false
+  error_codes: false
+  error_code_note: >-
+    There is no symbolic error code, error type URI, or documented error-code
+    registry. A client can only branch on the HTTP status and on English message
+    text, which makes precise programmatic error handling impossible.
+
+problem_types:
+- status: 401
+  title: No valid API key provided
+  message: No valid API key provided.
+  method: probed
+  observed_at: https://app.replyr.ai/api/accounts/me
+  declared_in_spec: false
+  cause: >-
+    The X-ACCESS-TOKEN header is missing, malformed, revoked, or belongs to
+    another account.
+  remediation: >-
+    Issue or re-issue an access token from the Replyr console and send it in the
+    X-ACCESS-TOKEN request header. The same envelope is returned for a missing
+    header and for a syntactically well-formed but invalid token, so the two
+    cases cannot be told apart from the response.
+  note: >-
+    This status is returned by every /api/* path including paths that are not in
+    the specification, so a 401 is not by itself evidence that the requested
+    operation exists.
+
+- status: 400
+  title: Invalid parameters
+  declared_in_spec: true
+  method: derived
+  operations:
+  - getUserByName
+  - findByCustomField
+  - getAIAgents
+  - updateAIById
+  - getCalendars
+  - payOrder
+  - changeOrder
+  spec_descriptions:
+  - operation: getUserByName
+    description: Invalid username supplied
+  - operation: findByCustomField
+    description: Invalid parameters
+  - operation: getAIAgents
+    description: Invalid parameters
+  - operation: updateAIById
+    description: Invalid parameters
+  - operation: getCalendars
+    description: Invalid parameters
+  - operation: payOrder
+    description: The amount received is less than the total value of the order.
+  - operation: changeOrder
+    description: Invalid parameters
+  cause: >-
+    A required query, path, or form parameter is missing, of the wrong type, or
+    semantically rejected. On payOrder specifically it means amount_received is
+    below the order total.
+  remediation: >-
+    Validate parameter types against the specification before sending. For
+    payOrder, send amount_received in cents and at least equal to the order
+    total.
+
+- status: 402
+  title: Payment could not be completed
+  declared_in_spec: true
+  method: derived
+  operations:
+  - payOrder
+  - changeOrder
+  spec_descriptions:
+  - operation: payOrder
+    description: The contact received a message on Messenger why the checkout failed.
+  cause: >-
+    The checkout failed downstream of the API call. Replyr's documented behaviour
+    is to notify the end contact in the chat channel rather than to return a
+    machine-readable failure reason.
+  remediation: >-
+    There is no decline-code surface to branch on. The calling system must treat
+    402 as terminal for that attempt and reconcile order state with
+    getUserOrder.
+  note: >-
+    This is the closest thing to a decline signal in the API, but it carries no
+    decline code, so no errors/replyrai-decline-codes.yml is emitted - there is
+    nothing published to catalog.
+
+- status: 404
+  title: Resource not found
+  declared_in_spec: true
+  method: derived
+  operations:
+  - getUserByName
+  - payOrder
+  - changeOrder
+  spec_descriptions:
+  - operation: getUserByName
+    description: User not found
+  - operation: payOrder
+    description: The order ID doesn't existe
+  - operation: changeOrder
+    description: The order ID doesn't existe
+  cause: The addressed contact or order id does not exist on this account.
+  remediation: >-
+    Resolve the contact with findByCustomField (by phone or email) before
+    addressing it by id, and resolve orders through getUserCart / getUserOrder.
+
+coverage:
+  operations_total: 65
+  operations_declaring_4xx: 9
+  operations_declaring_only_200: 49
+  operations_declaring_only_default: 7
+  statuses_declared:
+  - 400
+  - 402
+  - 404
+  statuses_observed:
+  - 401
+  gap: >-
+    49 of 65 operations declare a 200 response and nothing else - no 400, no 401,
+    no 404, no 5xx - even though every operation is authenticated and therefore
+    can return the observed 401. No 5xx response is declared anywhere in the
+    specification. A client generated from this contract will have no typed
+    handling for the most common failure it will actually hit.

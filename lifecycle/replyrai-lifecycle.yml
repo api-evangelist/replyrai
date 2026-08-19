@@ -1,0 +1,88 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://app.replyr.ai/api (Swagger UI + Swagger 2.0 document), https://replyr.ai/,
+  and direct probes for changelog, status and policy pages
+note: >-
+  Replyr publishes no versioning policy, no deprecation policy, no SLA, no status
+  page and no changelog. This file records those absences with the URLs probed,
+  so no StatusPage and no Deprecation pointer is wired in apis.yml. The spec's
+  info.version is the only version signal published anywhere.
+
+versioning:
+  documented: false
+  scheme: unversioned
+  spec_version: '1.1'
+  in_path: false
+  in_header: false
+  detail: >-
+    host is app.replyr.ai/api with basePath / and no version segment. The Swagger
+    document declares info.version 1.1 and the Swagger UI loads its JSON with a
+    ?v=22 cache-buster, but neither is addressable by a client - there is no way
+    to pin a version when calling the API.
+
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  detail: >-
+    No operation in the specification carries deprecated: true, and no
+    Deprecation or Sunset response header is documented or observed. There is no
+    published notice period or migration commitment, so a consumer has no
+    contractual warning before a breaking change.
+
+status_page:
+  published: false
+  url: null
+  probes:
+  - url: https://status.replyr.ai/
+    status: 000
+    result: host does not resolve
+  detail: >-
+    No status page, no uptime history, and no incident feed was found on any
+    Replyr host.
+
+sla:
+  published: false
+  uptime_target: null
+  support_response_target: null
+  detail: >-
+    No service level agreement or uptime commitment is published. The marketing
+    site's only availability claim is a sub-5-second AI reply time in demo copy,
+    which is a product claim rather than an SLA.
+
+changelog:
+  published: false
+  url: null
+  detail: >-
+    No dated changelog, release notes or version history page was found, so no
+    changelog/ artifact and no ChangeLog pointer is emitted.
+
+support:
+  channels:
+  - type: whatsapp
+    url: https://wa.me/60109696912
+    note: The contact channel published on replyr.ai.
+  - type: console
+    url: https://app.replyr.ai/en/login
+    note: Operator console sign-in; support surfaces are behind it.
+
+maturity:
+  stage: production
+  evidence: >-
+    The API is live and authenticating (HTTP 401 with a structured envelope on an
+    unauthenticated call), the reference is publicly reachable, and the surface
+    covers 65 operations across 8 tags. What is missing is the operational
+    scaffolding around it - no versioning, deprecation, status, SLA or changelog.
+
+x-evidence:
+  checked: '2026-08-13'
+  probes:
+  - url: https://app.replyr.ai/api
+    status: 200
+  - url: https://status.replyr.ai/
+    status: 000
+  - url: https://replyr.ai/sitemap.xml
+    status: 404

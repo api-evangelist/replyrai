@@ -1,0 +1,53 @@
+generated: '2026-08-13'
+method: searched
+source: https://replyr.ai/
+note: >-
+  Replyr publishes no pricing tiers. The homepage carries a #pricing anchor, but
+  the section behind it is a "Qualify My Clinic" lead-capture form (name, clinic
+  name, Malaysian phone number, optional email, role, a monthly-revenue band
+  selector, and interest checkboxes for AI Chat / Advertising / BookAClinic /
+  Content & Podcast / a February promo), closing with "No lock-in contracts.
+  Results-focused." There is no price, no tier, no quota and no published billing
+  period anywhere on the site or in the operator console, and the console has no
+  public sign-up route - https://app.replyr.ai/en/register returns 404 and the
+  only entry point is a login. Pricing is a sales conversation.
+  The Ringgit figures that appear on the marketing site (RM12 and RM18 cost per
+  lead, RM299 and RM1,200 treatment prices, RM328,150 revenue generated) are
+  case-study and demo-chat copy describing clinic economics, NOT Replyr's own
+  prices, and are deliberately not recorded as plans.
+  One machine-readable pricing signal does exist but is not resolvable: the
+  Account object returned by GET /accounts/me carries an integer `plan` field,
+  and no plan catalog is published to translate that integer into a tier name,
+  price or entitlement.
+plan_count: 0
+currency: null
+billing_periods: []
+plans: []
+access_model:
+  pricing: contact-sales
+  onboarding: sales-gate
+  self_serve_signup: false
+  free_tier: false
+  trial: false
+  public_pricing: false
+api_pricing:
+  metered: unknown
+  detail: >-
+    No API-specific pricing, no per-call rate, no quota and no overage schedule is
+    published. Whether API access is included in a subscription or sold
+    separately is not stated anywhere in the reference or on the site.
+x-evidence:
+  checked: '2026-08-13'
+  probes:
+  - url: https://replyr.ai/
+    status: 200
+  - url: https://replyr.ai/pricing
+    status: 200
+    note: >-
+      Returns the same 3470-byte single-page-app shell as every other path; the
+      client-side router defines only /, /about-us and /results, so /pricing is
+      not a real page.
+  - url: https://app.replyr.ai/en/register
+    status: 404
+  - url: https://app.replyr.ai/en/pricing
+    status: 404

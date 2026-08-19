@@ -1,0 +1,151 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/replyrai-platform-api-swagger.json, live probes of https://app.replyr.ai,
+  and a search of https://replyr.ai/ for compliance claims
+note: >-
+  Replyr publishes no compliance page, no trust center, and names no
+  certification. No Compliance and no TrustCenter pointer is wired in apis.yml.
+  Every entry below is an assertion with its evidence; conforms:false is a
+  measured result, not an omission. Note the healthcare context - the product is
+  sold to clinics and moves patient enquiries through WhatsApp - which makes the
+  absence of any published privacy, data-residency or health-data posture the
+  most material gap on this profile.
+
+standards:
+- id: openapi
+  name: OpenAPI Specification
+  conforms: partial
+  version: Swagger 2.0
+  evidence: >-
+    A valid Swagger 2.0 document with 48 paths and 65 operations is served at
+    https://app.replyr.ai/php/images.php?id=swagger.json and rendered by Swagger
+    UI 3.16.0 at https://app.replyr.ai/api. It is two major versions behind
+    OpenAPI 3.1, and the document is not linked from any stable, guessable URL -
+    it is loaded by a script on the docs page.
+
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    Errors use a vendor envelope {"error":{"code","message"}} served as
+    text/html. No application/problem+json, no type URI, no title/detail/instance
+    members.
+
+- id: pagination
+  name: Cursor or offset pagination across collections
+  conforms: partial
+  evidence: >-
+    offset/limit are declared on 3 of the collection operations (getPipelines,
+    pipelinesGetCards, pipelinesGetComments). Other collections
+    (findByCustomField, getAIAgents) are hard-capped at 100 items with no paging
+    parameters, so the surface is inconsistent.
+
+- id: idempotency
+  name: Idempotency keys on unsafe methods
+  conforms: false
+  evidence: >-
+    No idempotency header or deduplication parameter anywhere in the
+    specification, including on the messaging and payment write operations.
+
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: >-
+    The only securityDefinition is an apiKey in the X-ACCESS-TOKEN header. No
+    OAuth flows are declared and /.well-known/oauth-authorization-server returns
+    404 on both hosts.
+
+- id: oidc
+  name: OpenID Connect
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on replyr.ai and app.replyr.ai.
+
+- id: rfc9116
+  name: RFC 9116 security.txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on both hosts.
+
+- id: rfc8594
+  name: RFC 8594 Sunset header / deprecation signalling
+  conforms: false
+  evidence: >-
+    No Sunset or Deprecation header is documented or observed, and no operation
+    is marked deprecated.
+
+- id: rfc8615
+  name: RFC 8615 well-known URIs
+  conforms: false
+  evidence: >-
+    16 well-known paths probed across 2 hosts, 0 documents served. See
+    well-known/replyrai-well-known.yml.
+
+- id: a2a
+  name: A2A Agent Card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json both return 404 on
+    replyr.ai and app.replyr.ai.
+
+- id: mcp
+  name: Model Context Protocol server
+  conforms: false
+  evidence: >-
+    No hosted MCP endpoint responds to tools/list. See mcp/replyrai-mcp.yml.
+  note: >-
+    Replyr is an MCP consumer rather than a provider - GET /agents/mcp lists the
+    MCP connections a customer wires into their own AI agents inside the product.
+
+- id: asyncapi
+  name: AsyncAPI event specification
+  conforms: false
+  not_applicable: false
+  evidence: >-
+    No AsyncAPI document, no webhook definitions, no callbacks and no event
+    catalog. Notable because the product is event-driven by nature - inbound chat
+    messages - but the events are consumable only through in-product flows.
+
+- id: rate-limit-headers
+  name: RateLimit header fields for HTTP
+  conforms: false
+  evidence: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header on any observed response.
+
+- id: tls
+  name: TLS 1.2+ on all published hosts
+  conforms: true
+  evidence: >-
+    replyr.ai and app.replyr.ai both negotiate TLSv1.3. See
+    security/replyrai-domain-security.yml.
+
+- id: hsts
+  name: HTTP Strict Transport Security
+  conforms: partial
+  evidence: >-
+    replyr.ai sends HSTS with max-age 31536000; app.replyr.ai - the host that
+    carries the API and the authenticated console - does not send HSTS at all.
+
+certifications:
+  published: []
+  detail: >-
+    No SOC 2, ISO 27001, PCI DSS, HIPAA, GDPR or Malaysian PDPA claim was found
+    on any Replyr host. No trust center exists.
+
+compliance_context:
+  sector: healthcare marketing / patient acquisition
+  jurisdiction: Malaysia
+  regimes_likely_in_scope:
+  - name: Personal Data Protection Act 2010 (Malaysia)
+    published_posture: none
+  - name: WhatsApp Business Platform policy
+    published_posture: none
+  detail: >-
+    Recorded as context, not as a finding of non-compliance. The company may hold
+    postures it does not publish; what is measurable here is that nothing is
+    published.
+
+summary:
+  assertions: 15
+  conforms_true: 1
+  conforms_partial: 3
+  conforms_false: 11

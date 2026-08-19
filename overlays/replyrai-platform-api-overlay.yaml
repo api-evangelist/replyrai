@@ -1,0 +1,136 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Replyr Platform API
+  version: 1.0.0
+x-generated: '2026-08-13'
+x-method: derived
+x-source: openapi/replyrai-platform-api-swagger.json
+x-extends: openapi/replyrai-platform-api-swagger.json
+x-note: >-
+  Non-destructive enhancements to the Replyr-published Swagger 2.0 document. The
+  original is never mutated. Every action here either (a) restates something
+  observed live against https://app.replyr.ai/api, or (b) declares metadata the
+  provider left empty. Nothing invents an operation, a parameter, or a schema.
+  The two substantive corrections are the globally missing 401 response - every
+  operation is authenticated and returns
+  {"error":{"code":401,"message":"No valid API key provided."}} but only the
+  security block hints at it - and the duplicate operationId getProductById,
+  which the provider uses for both GET /calendars/{calendar_id} and
+  GET /products/{product_id} and which will collide in any generated client.
+
+actions:
+
+- target: $.info
+  description: >-
+    Fill in the empty API identity. The provider publishes only title "API Docs"
+    and version 1.1, which does not identify the API, its vendor, or where to get
+    help.
+  update:
+    title: Replyr Platform API
+    description: >-
+      REST API for the Replyr operator console at app.replyr.ai - accounts,
+      contacts, tags and custom fields, outbound messaging across connected chat
+      channels, sales pipelines and opportunities, AI agents, appointment
+      calendars, templates, and an ecommerce cart/order surface. Replyr runs a
+      white-labeled deployment of the ChatRace conversational-commerce platform;
+      this contract is served from and describes Replyr's own host.
+      Authentication is a single X-ACCESS-TOKEN API key header.
+    contact:
+      name: Replyr Sdn Bhd
+      url: https://replyr.ai
+    x-api-evangelist-profile: https://apis.io/provider/replyrai
+
+- target: $.tags
+  description: >-
+    Declare the six tags used by operations but never declared at the document
+    root. The provider declares only Accounts and Contacts, while operations also
+    use Pipelines, AI Agents, Templates, Appointment Management and Ecommerce.
+  update:
+  - name: Pipelines
+    description: Sales and ticketing pipelines, stages, opportunities and comments.
+  - name: AI Agents
+    description: AI agents configured on the account, with their functions, files and MCP connections.
+  - name: Templates
+    description: Installing account templates and generating single-use template links.
+  - name: Appointment Management
+    description: Appointment calendars.
+  - name: Ecommerce
+    description: Product catalog, contact carts, orders and payment state.
+
+- target: $.paths.*.*.responses
+  description: >-
+    Add the 401 response every operation can return. Security is applied globally
+    in the document, so all 65 operations require X-ACCESS-TOKEN, yet not one
+    declares a 401. Observed live on GET /accounts/me on 2026-08-13.
+  update:
+    '401':
+      description: >-
+        No valid API key provided. Returned when the X-ACCESS-TOKEN header is
+        missing, malformed, revoked, or belongs to another account. Body is JSON
+        of the form {"error":{"code":401,"message":"No valid API key provided."}}
+        but is served with Content-Type text/html.
+      x-observed: true
+      x-observed-at: https://app.replyr.ai/api/accounts/me
+      x-envelope:
+        error:
+          code: 401
+          message: No valid API key provided.
+
+- target: $.paths['/calendars/{calendar_id}'].get
+  description: >-
+    Correct a duplicate operationId. The provider uses getProductById for both
+    this calendar read and GET /products/{product_id}. Two operations sharing one
+    operationId is invalid for code generation and will collide in every
+    generated client.
+  update:
+    x-api-evangelist-suggested-operationId: getCalendarById
+    x-defect: duplicate-operationId
+    x-defect-detail: >-
+      operationId getProductById is also used by GET /products/{product_id}.
+      Renaming this one to getCalendarById resolves the collision without
+      changing the products operation.
+
+- target: $.paths['/contacts'].post
+  description: >-
+    Flag the gender type inconsistency. The createNewContact request body types
+    gender as a string enum of male/female/unknown, while the Contact definition
+    returned by reads types gender as an integer. A client cannot round-trip the
+    field as published.
+  update:
+    x-defect: request-response-type-mismatch
+    x-defect-detail: >-
+      gender is a string enum on the request body and an integer on the Contact
+      response schema.
+
+- target: $.securityDefinitions.APIKeyHeader
+  description: Document the credential's origin and scope, which the specification leaves blank.
+  update:
+    description: >-
+      Account-scoped API key issued from the Replyr operator console at
+      app.replyr.ai and sent in the X-ACCESS-TOKEN request header. There is no
+      scope surface - the key is all-or-nothing across all 65 operations,
+      including outbound messaging to real end users and order payment state
+      changes.
+    x-scopes: none
+    x-rotation-policy: not published
+
+- target: $.paths['/contacts/{contact_id}/send/text'].post
+  description: >-
+    Record the absence of an idempotency guarantee on a side-effecting messaging
+    operation. A retried call sends a second real message to a real person.
+  update:
+    x-idempotent: false
+    x-consequence: external-side-effect
+    x-consequence-detail: >-
+      Delivers a message to an end contact on a live chat channel. No idempotency
+      key is supported, so client-side deduplication is required before retry.
+
+- target: $.paths['/contacts/{contact_id}/pay/{order_id}'].post
+  description: Record the same absence on the payment state transition.
+  update:
+    x-idempotent: false
+    x-consequence: financial
+    x-consequence-detail: >-
+      Marks an order as paid. No idempotency key is supported and no decline code
+      is returned on the documented 402, so a retry cannot be made safe from the
+      contract alone.
