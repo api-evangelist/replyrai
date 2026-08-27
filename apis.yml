@@ -52,31 +52,16 @@ tags:
 - Healthcare
 - Malaysia
 apis:
-- name: Replyr Platform API
-  description: >-
-    REST API for the Replyr operator console at app.replyr.ai. Covers business
-    account details, admins and teams, tags, custom fields and bot fields,
-    contacts (create, look up, tag, set fields), outbound messaging across the
-    connected chat channels (text, file, product, flow and multi-action
-    send_content), sales pipelines with stages, opportunities and comments, AI
-    agents with their functions, files and configured MCP connections,
-    appointment calendars, template installation, and an ecommerce cart, order
-    and product surface. Authenticated with a single X-ACCESS-TOKEN API key
-    header issued from the console.
+- aid: replyrai:replyrai-accounts-api
+  name: Replyr.ai Accounts API
+  description: The Accounts API from Replyr.ai — 13 operation(s) for accounts.
   humanURL: https://app.replyr.ai/api
   baseURL: https://app.replyr.ai/api
   tags:
-  - Conversational AI
-  - Chatbots
-  - Messaging
-  - WhatsApp
-  - CRM
-  - Lead Generation
-  - Appointment Scheduling
-  - Customer Engagement
+  - Accounts
   properties:
   - type: OpenAPI
-    url: openapi/replyrai-platform-api-swagger.json
+    url: openapi/replyrai-accounts-api-openapi.yml
   - type: APIReference
     url: https://app.replyr.ai/api
   - type: Documentation
@@ -89,10 +74,139 @@ apis:
     url: data-model/replyrai-data-model.yml
   - type: ErrorCatalog
     url: errors/replyrai-problem-types.yml
-  - type: Overlay
-    url: overlays/replyrai-platform-api-overlay.yaml
-  - type: AgentSkill
-    url: skills/_index.yml
+- aid: replyrai:replyrai-ai-agents-api
+  name: Replyr.ai AI Agents API
+  description: The AI Agents API from Replyr.ai — 5 operation(s) for ai agents.
+  humanURL: https://app.replyr.ai/api
+  baseURL: https://app.replyr.ai/api
+  tags:
+  - AI Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/replyrai-ai-agents-api-openapi.yml
+  - type: APIReference
+    url: https://app.replyr.ai/api
+  - type: Documentation
+    url: https://app.replyr.ai/api
+  - type: Authentication
+    url: authentication/replyrai-authentication.yml
+  - type: Conventions
+    url: conventions/replyrai-conventions.yml
+  - type: DataModel
+    url: data-model/replyrai-data-model.yml
+  - type: ErrorCatalog
+    url: errors/replyrai-problem-types.yml
+- aid: replyrai:replyrai-appointment-management-api
+  name: Replyr.ai Appointment Management API
+  description: >-
+    The Appointment Management API from Replyr.ai — 2 operation(s) for appointment management.
+  humanURL: https://app.replyr.ai/api
+  baseURL: https://app.replyr.ai/api
+  tags:
+  - Appointment Management
+  properties:
+  - type: OpenAPI
+    url: openapi/replyrai-appointment-management-api-openapi.yml
+  - type: APIReference
+    url: https://app.replyr.ai/api
+  - type: Documentation
+    url: https://app.replyr.ai/api
+  - type: Authentication
+    url: authentication/replyrai-authentication.yml
+  - type: Conventions
+    url: conventions/replyrai-conventions.yml
+  - type: DataModel
+    url: data-model/replyrai-data-model.yml
+  - type: ErrorCatalog
+    url: errors/replyrai-problem-types.yml
+- aid: replyrai:replyrai-contacts-api
+  name: Replyr.ai Contacts API
+  description: The Contacts API from Replyr.ai — 12 operation(s) for contacts.
+  humanURL: https://app.replyr.ai/api
+  baseURL: https://app.replyr.ai/api
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/replyrai-contacts-api-openapi.yml
+  - type: APIReference
+    url: https://app.replyr.ai/api
+  - type: Documentation
+    url: https://app.replyr.ai/api
+  - type: Authentication
+    url: authentication/replyrai-authentication.yml
+  - type: Conventions
+    url: conventions/replyrai-conventions.yml
+  - type: DataModel
+    url: data-model/replyrai-data-model.yml
+  - type: ErrorCatalog
+    url: errors/replyrai-problem-types.yml
+- aid: replyrai:replyrai-ecommerce-api
+  name: Replyr.ai Ecommerce API
+  description: The Ecommerce API from Replyr.ai — 6 operation(s) for ecommerce.
+  humanURL: https://app.replyr.ai/api
+  baseURL: https://app.replyr.ai/api
+  tags:
+  - Ecommerce
+  properties:
+  - type: OpenAPI
+    url: openapi/replyrai-ecommerce-api-openapi.yml
+  - type: APIReference
+    url: https://app.replyr.ai/api
+  - type: Documentation
+    url: https://app.replyr.ai/api
+  - type: Authentication
+    url: authentication/replyrai-authentication.yml
+  - type: Conventions
+    url: conventions/replyrai-conventions.yml
+  - type: DataModel
+    url: data-model/replyrai-data-model.yml
+  - type: ErrorCatalog
+    url: errors/replyrai-problem-types.yml
+- aid: replyrai:replyrai-pipelines-api
+  name: Replyr.ai Pipelines API
+  description: The Pipelines API from Replyr.ai — 9 operation(s) for pipelines.
+  humanURL: https://app.replyr.ai/api
+  baseURL: https://app.replyr.ai/api
+  tags:
+  - Pipelines
+  properties:
+  - type: OpenAPI
+    url: openapi/replyrai-pipelines-api-openapi.yml
+  - type: APIReference
+    url: https://app.replyr.ai/api
+  - type: Documentation
+    url: https://app.replyr.ai/api
+  - type: Authentication
+    url: authentication/replyrai-authentication.yml
+  - type: Conventions
+    url: conventions/replyrai-conventions.yml
+  - type: DataModel
+    url: data-model/replyrai-data-model.yml
+  - type: ErrorCatalog
+    url: errors/replyrai-problem-types.yml
+- aid: replyrai:replyrai-templates-api
+  name: Replyr.ai Templates API
+  description: The Templates API from Replyr.ai — 1 operation(s) for templates.
+  humanURL: https://app.replyr.ai/api
+  baseURL: https://app.replyr.ai/api
+  tags:
+  - Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/replyrai-templates-api-openapi.yml
+  - type: APIReference
+    url: https://app.replyr.ai/api
+  - type: Documentation
+    url: https://app.replyr.ai/api
+  - type: Authentication
+    url: authentication/replyrai-authentication.yml
+  - type: Conventions
+    url: conventions/replyrai-conventions.yml
+  - type: DataModel
+    url: data-model/replyrai-data-model.yml
+  - type: ErrorCatalog
+    url: errors/replyrai-problem-types.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
