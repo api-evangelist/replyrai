@@ -225,6 +225,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/replyrai-capability-edges.yml
+  name: Replyr.ai Business Capability Map
 - type: Website
   url: https://replyr.ai
 - type: APIReference
