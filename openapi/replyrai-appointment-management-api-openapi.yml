@@ -1,0 +1,79 @@
+openapi: 3.2.0
+info:
+  version: '1.1'
+  title: Docs Appointment Management API
+servers:
+- url: https://app.replyr.ai/api/
+security:
+- APIKeyHeader: []
+tags:
+- name: Appointment Management
+paths:
+  /calendars:
+    get:
+      tags:
+      - Appointment Management
+      description: Get list of calendars
+      operationId: getCalendars
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Calendar'
+                    maximum: '100'
+                type: object
+        '400':
+          description: Invalid parameters
+  /calendars/{calendar_id}:
+    get:
+      tags:
+      - Appointment Management
+      description: Get product by id
+      operationId: getProductById
+      parameters:
+      - name: calendar_id
+        in: path
+        required: true
+        schema:
+          type: number
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Calendar'
+components:
+  schemas:
+    Calendar:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+        duration:
+          type: number
+          format: int64
+        created_by:
+          type: number
+          format: int64
+        created_at:
+          type: string
+          format: date-time
+          description: Date in UTC. Example 2022-10-12 14:40:00
+      xml:
+        name: Calendar
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-ACCESS-TOKEN

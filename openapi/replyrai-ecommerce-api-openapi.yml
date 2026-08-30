@@ -1,0 +1,590 @@
+openapi: 3.2.0
+info:
+  version: '1.1'
+  title: Docs Ecommerce API
+servers:
+- url: https://app.replyr.ai/api/
+security:
+- APIKeyHeader: []
+tags:
+- name: Ecommerce
+paths:
+  /contacts/{contact_id}/send/products:
+    post:
+      tags:
+      - Ecommerce
+      description: Send a product message to the contact
+      operationId: sendProduct
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        default:
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: array
+                  required: true
+                  description: The product_id  field could be a single product id, an array of product ids, or multiple product ids separated by a comma
+              example:
+                product_id:
+                - 1111
+                - 222
+                - 3333
+        required: true
+  /contacts/{contact_id}/cart:
+    get:
+      tags:
+      - Ecommerce
+      description: Get the contact cart ready for checkout
+      operationId: getUserCart
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+    delete:
+      tags:
+      - Ecommerce
+      description: Clear the contact cart
+      operationId: clearUserCart
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+  /contacts/{contact_id}/pay/{order_id}:
+    post:
+      tags:
+      - Ecommerce
+      description: Mark an order as Paid.
+      operationId: payOrder
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+        '400':
+          description: The amount received is less than the total value of the order.
+        '402':
+          description: The contact received a message on Messenger why the checkout failed.
+        '404':
+          description: The order ID doesn't existe
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                amount_received:
+                  type: integer
+                  description: Total value the contact paid in cents.
+              required:
+              - amount_received
+  /contacts/{contact_id}/order/{order_id}:
+    get:
+      tags:
+      - Ecommerce
+      description: Get order information
+      operationId: getUserOrder
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+    post:
+      tags:
+      - Ecommerce
+      description: Change order status.
+      operationId: changeOrder
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+        '400':
+          description: Order status must be 6, 7, 10, or 13
+        '402':
+          description: The order status is the same as the previous status
+        '404':
+          description: The order ID doesn't existe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  name: status
+                  in: formData
+                  required: false
+                  type: integer
+                  enum:
+                  - 6
+                  - 7
+                  - 10
+                  - 13
+                  description: The new order status. 6 - Processing, 7 - Shipped, 10 - Completed, 13 - Canceled.
+                name:
+                  required: false
+                  type: string
+                  name: The name for the shipping
+                phone:
+                  required: false
+                  type: string
+                  name: The phone for the shipping
+                email:
+                  required: false
+                  type: string
+                  name: The email for the shipping
+                country:
+                  required: false
+                  type: string
+                  name: The country for the shipping
+                state:
+                  required: false
+                  type: string
+                  name: The state for the shipping
+                city:
+                  required: false
+                  type: string
+                  name: The city for the shipping
+                zip_code:
+                  required: false
+                  type: string
+                  name: The zip code for the shipping
+                address:
+                  required: false
+                  type: string
+                  name: The address for the shipping
+                street_1:
+                  required: false
+                  type: string
+                  name: The street_1 for the shipping
+                street_2:
+                  required: false
+                  type: string
+                  name: The street_2 for the shipping
+                note:
+                  required: false
+                  type: string
+                  name: Note related to the order.
+              example:
+                status: 7
+        required: true
+  /contacts/{contact_id}/cart/{product_id}:
+    post:
+      tags:
+      - Ecommerce
+      description: Add a product to contact cart
+      operationId: addProductCart
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+              required:
+              - quantity
+    delete:
+      tags:
+      - Ecommerce
+      description: remove a product from contact cart
+      operationId: removeProductCart
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+  /products/{product_id}:
+    get:
+      tags:
+      - Ecommerce
+      description: Get product by id
+      operationId: getProductById
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    post:
+      tags:
+      - Ecommerce
+      description: Update product.
+      operationId: updateProduct
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  updated:
+                    type: boolean
+                example:
+                  success: true
+                  updated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                price:
+                  required: false
+                  type: number
+                active:
+                  required: false
+                  type: boolean
+                  description: if contacts can buy the product.
+                stock:
+                  type: number
+                  required: false
+              example:
+                active: false
+                stock: 500
+                price: 40
+        required: true
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        price:
+          type: number
+          format: double
+        sale_price:
+          type: number
+          format: double
+        category_id:
+          type: integer
+          format: int64
+        category_name:
+          type: string
+        stock:
+          type: integer
+          format: int64
+        short_description:
+          type: string
+        image:
+          type: string
+        created_at:
+          type: string
+          description: Subscribed date in UTC. Example 2022-10-12 14:40:00
+      xml:
+        name: Product
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: Tag
+    Cart:
+      type: object
+      description: All value related to money is in cents
+      properties:
+        order_id:
+          type: string
+        page_id:
+          type: integer
+          format: int64
+        user_id:
+          type: integer
+          format: int64
+          description: The contact ID
+        currency:
+          type: string
+        total:
+          type: integer
+          format: int64
+        subtotal:
+          type: integer
+          format: int64
+        total_items:
+          type: integer
+          format: int32
+        coupon_discount:
+          type: integer
+          format: int64
+        coupon:
+          type: string
+        line_items:
+          type: array
+          xml:
+            name: line_items
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/ProductCart'
+        contact:
+          $ref: '#/components/schemas/Contact'
+      xml:
+        name: cart
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        page_id:
+          type: integer
+          format: int64
+        first_name:
+          type: string
+        last_name:
+          type: string
+        channel:
+          type: integer
+          description: 0 - Messenger, 2 - SMS, 5 - WhatsApp, 7 - Google Business Message, 8 - Telegram, 9 - Webchat
+        profile_pic:
+          type: string
+        locale:
+          type: string
+        gender:
+          type: integer
+          description: 0 - Female, 1 - Male, 2 - Unknown
+        timezone:
+          type: integer
+        last_sent:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds
+        last_delivered:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds
+        last_seen:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds
+        last_interaction:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds
+        subscribed_date:
+          type: string
+          description: Subscribed date in UTC. Example 2022-10-12 14:40:00
+        subscribed:
+          type: integer
+          description: 1 - Subscribed, 2 - Unsubscribed
+        tags:
+          type: array
+          xml:
+            name: tag
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Tag'
+        custom_fields:
+          type: array
+          xml:
+            name: tag
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Custom_field'
+      xml:
+        name: Contact
+    ProductCart:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        img:
+          type: string
+        price:
+          type: number
+          format: double
+          description: the price is not in cents
+        amount:
+          type: integer
+          description: quantity
+        descr_min:
+          type: string
+        manufacturer:
+          type: integer
+          description: The vendor ID
+        variant:
+          type: string
+        user_msg:
+          type: string
+      xml:
+        name: ProductCart
+    Custom_field:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        type:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          description: 0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1), 5- Long Text, 6 - Select, 7 - Multi Select
+        value:
+          type: string
+          description: type == 0 then value is string, else value is a number
+      xml:
+        name: Custom_field
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-ACCESS-TOKEN

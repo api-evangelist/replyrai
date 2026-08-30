@@ -1,0 +1,619 @@
+openapi: 3.2.0
+info:
+  version: '1.1'
+  title: Docs Pipelines API
+servers:
+- url: https://app.replyr.ai/api/
+security:
+- APIKeyHeader: []
+tags:
+- name: Pipelines
+paths:
+  /pipelines:
+    get:
+      tags:
+      - Pipelines
+      description: Get list of pipelines
+      operationId: getPipelines
+      parameters:
+      - name: offset
+        in: query
+        required: false
+        description: Specifies the starting position of the first record to return in a paginated response.
+        schema:
+          type: integer
+          default: 0
+      - name: limit
+        in: query
+        required: false
+        description: Sets the maximum number of records to return per request.
+        schema:
+          type: integer
+          default: 100
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pipeline'
+  /pipelines/{pipeline_id}:
+    get:
+      tags:
+      - Pipelines
+      description: Get list of pipelines
+      operationId: getPipeline
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+  /pipelines/{pipeline_id}/stages:
+    get:
+      tags:
+      - Pipelines
+      description: Get list of pipeline stages
+      operationId: getPipelineStages
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PipelineStage'
+  /pipelines/{pipeline_id}/custom_fields:
+    get:
+      tags:
+      - Pipelines
+      description: Get all custom fields from a pipeline.
+      operationId: getPipelineCustomFields
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      format: int64
+                    name:
+                      type: string
+                    type:
+                      type: string
+                    description:
+                      type: string
+  /pipelines/{pipeline_id}/opportunities:
+    get:
+      tags:
+      - Pipelines
+      description: Get list of opportunities / tickets
+      operationId: pipelinesGetCards
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: contact_id
+        in: query
+        required: false
+        description: The ID of the contact to filter the opportunities.
+        schema:
+          type: number
+      - name: offset
+        in: query
+        required: false
+        description: Specifies the starting position of the first record to return in a paginated response.
+        schema:
+          type: integer
+          default: 0
+      - name: limit
+        in: query
+        required: false
+        description: Sets the maximum number of records to return per request.
+        schema:
+          type: integer
+          default: 100
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Opportunity'
+    post:
+      tags:
+      - Pipelines
+      description: Creates an opportunity / ticket.
+      operationId: pipelinesAddCard
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Opportunity'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contact_id:
+                  type: number
+                  required: true
+                title:
+                  type: string
+                  required: true
+                description:
+                  type: string
+                  required: false
+                stage_id:
+                  required: false
+                  type: number
+                  description: if omitted, the the contact is added to first stage.
+                value:
+                  required: false
+                  type: number
+                  default: '0'
+                status:
+                  required: false
+                  type: string
+                  default: open
+                  enum:
+                  - open
+                  - won
+                  - lost
+                  description: won is positive and lost is negative
+                priority:
+                  required: false
+                  type: string
+                  default: medium
+                  enum:
+                  - low
+                  - medium
+                  - high
+                assigned_admins:
+                  required: false
+                  type: array
+                  default: []
+              example:
+                contact_id: '12345678'
+                title: This is a test opportunity
+                description: '...'
+                stage_id: 12334
+                value: 300
+                status: open
+                priority: low
+                assigned_admins:
+                - 55446563
+                custom_fields:
+                - id: 1234
+                  value: Any data
+        description: Creates an opportunity / ticket
+        required: true
+  /pipelines/{pipeline_id}/opportunities/{opportunity_id}:
+    get:
+      tags:
+      - Pipelines
+      description: Get an opportunity / ticket
+      operationId: pipelinesGetCard
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: opportunity_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opportunity'
+    post:
+      tags:
+      - Pipelines
+      description: Updates an opportunity / ticket.
+      operationId: pipelinesUpdateCard
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: opportunity_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  required: true
+                description:
+                  type: string
+                  required: false
+                stage_id:
+                  required: false
+                  type: number
+                  description: if omitted, the the contact is added to first stage.
+                value:
+                  required: false
+                  type: number
+                  default: '0'
+                status:
+                  required: false
+                  type: string
+                  default: open
+                  enum:
+                  - open
+                  - won
+                  - lost
+                  description: won is positive and lost is negative
+                priority:
+                  required: false
+                  type: string
+                  default: medium
+                  enum:
+                  - low
+                  - medium
+                  - high
+                assigned_admins:
+                  required: false
+                  type: array
+                  default: []
+              example:
+                title: This is a test opportunity
+                description: '...'
+                stage_id: 12334
+                value: 300
+                status: open
+                priority: low
+                assigned_admins:
+                - 55446563
+                custom_fields:
+                - id: 1234
+                  value: Any data
+                - name: Age
+                  value: 30
+        required: true
+    delete:
+      tags:
+      - Pipelines
+      description: Delete an opportunity / ticket
+      operationId: pipelinesDeleteCard
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: opportunity_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+  /pipelines/{pipeline_id}/opportunities/{opportunity_id}/transfer-to-pipeline:
+    post:
+      tags:
+      - Pipelines
+      description: Transfer an opportunity / ticket to another pipeline.
+      operationId: pipelinesTransferCard
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: opportunity_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target_pipeline_id:
+                  required: true
+                  type: number
+                target_stage_id:
+                  required: true
+                  type: number
+              example:
+                target_pipeline_id: 123456
+                target_stage_id: 654321
+        required: true
+  /pipelines/{pipeline_id}/opportunities/{opportunity_id}/comments:
+    get:
+      tags:
+      - Pipelines
+      description: Get list of comments of an opportunity / ticket
+      operationId: pipelinesGetComments
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: opportunity_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: offset
+        in: query
+        required: false
+        description: Specifies the starting position of the first record to return in a paginated response.
+        schema:
+          type: integer
+          default: 0
+      - name: limit
+        in: query
+        required: false
+        description: Sets the maximum number of records to return per request.
+        schema:
+          type: integer
+          default: 100
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OpportunityComment'
+    post:
+      tags:
+      - Pipelines
+      description: Creates a new comment on an opportunity / ticket.
+      operationId: pipelinesAddComment
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: opportunity_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpportunityComment'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  required: true
+              example:
+                content: This is a comment
+        required: true
+  /pipelines/{pipeline_id}/opportunities/{opportunity_id}/comments/{comment_id}:
+    delete:
+      tags:
+      - Pipelines
+      description: Delete a comment of an opportunity / ticket
+      operationId: pipelinesDeleteComment
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: opportunity_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: comment_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+components:
+  schemas:
+    PipelineStage:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+      xml:
+        name: PipelineStage
+    Pipeline:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+      xml:
+        name: Pipeline
+    OpportunityComment:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        data:
+          type: string
+        created_at:
+          type: string
+          example: '2028-02-08 12:34:56'
+          description: UTC
+        created_by:
+          type: number
+          description: Admin ID
+      xml:
+        name: OpportunityComment
+    Opportunity:
+      type: object
+      properties:
+        id:
+          type: number
+        contact_id:
+          type: number
+        title:
+          type: string
+        description:
+          type: string
+        value:
+          type: number
+        status:
+          type: string
+        priority:
+          type: string
+        stage:
+          type: object
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+        assigned_admins:
+          type: array
+          items:
+            type: number
+        created_at:
+          type: string
+          example: '2028-02-08 12:34:56'
+          description: UTC
+        created_by:
+          type: number
+          description: Admin ID
+        updated_at:
+          type: string
+          example: '2028-02-08 12:34:56'
+          description: UTC
+        updated_by:
+          type: number
+          description: Admin ID
+      xml:
+        name: Opportunity
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-ACCESS-TOKEN

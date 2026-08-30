@@ -1,0 +1,221 @@
+openapi: 3.2.0
+info:
+  version: '1.1'
+  title: Docs AI Agents API
+servers:
+- url: https://app.replyr.ai/api/
+security:
+- APIKeyHeader: []
+tags:
+- name: AI Agents
+paths:
+  /agents/:
+    get:
+      tags:
+      - AI Agents
+      description: Get list of AI agents
+      operationId: getAIAgents
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Agent'
+                    maximum: '100'
+                type: object
+        '400':
+          description: Invalid parameters
+  /agents/{agent_id}:
+    get:
+      tags:
+      - AI Agents
+      description: Get AI agent by id
+      operationId: getAIById
+      parameters:
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: number
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+    post:
+      tags:
+      - AI Agents
+      description: Update AI agent by id
+      operationId: updateAIById
+      parameters:
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: number
+          format: int64
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '400':
+          description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                  required: false
+                  description: The prompt field for the AI agent
+                max_output_tokens:
+                  type: number
+                  required: false
+                  description: The max_output_tokens field for the AI agent
+                model:
+                  type: object
+                  required: false
+                  properties:
+                    openAI:
+                      type: string
+                      required: true
+                    gemini:
+                      type: string
+                      required: true
+                    claude:
+                      type: string
+                      required: true
+                    xAI:
+                      type: string
+                      required: true
+                    deepseek:
+                      type: string
+                      required: true
+              example:
+                prompt: Your prompt here
+        required: true
+  /agents/functions:
+    get:
+      tags:
+      - AI Agents
+      description: Get list of AI Functions
+      operationId: getAIFunctions
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        created_by:
+                          type: number
+                        created_at:
+                          type: string
+                          format: date-time
+                type: object
+  /agents/mcp:
+    get:
+      tags:
+      - AI Agents
+      description: Get list of AI MCPs
+      operationId: getAIMCPs
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        created_by:
+                          type: number
+                        created_at:
+                          type: string
+                          format: date-time
+                type: object
+  /agents/files:
+    get:
+      tags:
+      - AI Agents
+      description: Get list of AI Files
+      operationId: getAIFiles
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        size:
+                          type: number
+                        url:
+                          type: string
+                        created_by:
+                          type: number
+                        created_at:
+                          type: string
+                          format: date-time
+                type: object
+components:
+  schemas:
+    Agent:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+        created_by:
+          type: number
+          format: int64
+        created_at:
+          type: string
+          format: date-time
+          description: Date in UTC. Example 2022-10-12 14:40:00
+      xml:
+        name: Agent
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-ACCESS-TOKEN

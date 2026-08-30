@@ -1,0 +1,657 @@
+openapi: 3.2.0
+info:
+  version: '1.1'
+  title: Docs Contacts API
+servers:
+- url: https://app.replyr.ai/api/
+security:
+- APIKeyHeader: []
+tags:
+- name: Contacts
+paths:
+  /contacts/{contact_id}:
+    get:
+      tags:
+      - Contacts
+      description: Get contact by contact id
+      operationId: getUserByName
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+  /contacts/find_by_custom_field:
+    get:
+      tags:
+      - Contacts
+      description: 'Find contacts by custom field value. It will return maximum 100 contacts. The results are sorted by the last custom field value update for a contact. '
+      operationId: findByCustomField
+      parameters:
+      - name: field_id
+        in: query
+        required: true
+        description: Custom field ID. Use 'phone' or 'email' as custom field id if you want to find the contact by phone or email
+        schema:
+          type: string
+      - name: value
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contact'
+                    maximum: '100'
+                type: object
+        '400':
+          description: Invalid parameters
+  /contacts/{contact_id}/tags:
+    get:
+      tags:
+      - Contacts
+      description: Get all tags added to this contact
+      operationId: getUserTags
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+  /contacts/{contact_id}/tags/{tag_id}:
+    post:
+      tags:
+      - Contacts
+      description: Add a tag to the contact
+      operationId: addTagToUser
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: tag_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+    delete:
+      tags:
+      - Contacts
+      description: remove a tag from the contact
+      operationId: removeTagFromUser
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: tag_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+  /contacts:
+    post:
+      tags:
+      - Contacts
+      description: Creates a new contact.
+      operationId: createNewContact
+      responses:
+        default:
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  required: true
+                  type: string
+                  description: The phone number with country code
+                email:
+                  required: false
+                  type: string
+                  description: The contact email
+                first_name:
+                  type: string
+                  required: false
+                last_name:
+                  type: string
+                  required: false
+                gender:
+                  type: string
+                  required: false
+                  enum:
+                  - male
+                  - female
+                  - unknown
+                actions:
+                  type: array
+                  required: false
+                  description: Actions can be send flow, add/remove tags, set/unset custom field ...
+              example:
+                phone: '+1234567890'
+                email: test@test.com
+                first_name: John
+                last_name: Smith
+                gender: male
+                actions:
+                - action: add_tag
+                  tag_name: YOU_TAG_NAME
+                - action: set_field_value
+                  field_name: YOU_CUSTOM_FIELD_NAME
+                  value: ANY_VALUE
+                - action: send_flow
+                  flow_id: 11111
+        required: true
+  /contacts/{contact_id}/custom_fields:
+    get:
+      tags:
+      - Contacts
+      description: Get all custom fields from a contact
+      operationId: getUserFields
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Custom_field'
+  /contacts/{contact_id}/custom_fields/{custom_field_id}:
+    get:
+      tags:
+      - Contacts
+      description: Get custom field value by id
+      operationId: getFieldValue
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: custom_field_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  type:
+                    type: integer
+                  name:
+                    type: string
+                  value:
+                    type: string
+                example:
+                  id: 2334
+                  name: age
+                  type: 1
+                  value: 25
+    post:
+      tags:
+      - Contacts
+      description: Set a contact custom field
+      operationId: addFieldToUser
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: custom_field_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+              required:
+              - value
+    delete:
+      tags:
+      - Contacts
+      description: remove a custom field from the contact
+      operationId: removeFieldFromUser
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: custom_field_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+  /contacts/{contact_id}/send/{flow_id}:
+    post:
+      tags:
+      - Contacts
+      description: Send a flow to contact
+      operationId: sendFlowToUser
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: flow_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        default:
+          description: successful operation
+  /contacts/{contact_id}/send/text:
+    post:
+      tags:
+      - Contacts
+      description: Send text message to the contact
+      operationId: sendTextMessage
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  required: true
+                  type: string
+                channel:
+                  required: false
+                  type: string
+                  enum:
+                  - messenger
+                  - whatsapp
+                  - sms
+                  - webchat
+                  - telegram
+                  - instagram
+                  - viber
+                  - omnichannel
+              example:
+                text: This is a text message
+                channel: messenger
+        required: true
+  /contacts/{contact_id}/send/file:
+    post:
+      tags:
+      - Contacts
+      description: Send file
+      operationId: sendFile
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  required: true
+                  type: string
+                type:
+                  required: true
+                  type: string
+                  enum:
+                  - file
+                  - image
+                  - audio
+                  - video
+                channel:
+                  required: false
+                  type: string
+                  enum:
+                  - messenger
+                  - sms
+                  - whatsapp
+                  - googleBM
+                  - telegram
+                  - instagram
+                  - viber
+                  - omnichannel
+              example:
+                url: https://...
+                type: image
+                channel: messenger
+        required: true
+  /contacts/{contact_id}/send_content:
+    post:
+      tags:
+      - Contacts
+      description: Allows to run multiple actions and send multiple messages. Works for all channels.
+      operationId: sendContent
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        default:
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messages:
+                  type: array
+                  required: false
+                actions:
+                  type: array
+                  required: false
+                channel:
+                  required: false
+                  type: string
+                  enum:
+                  - messenger
+                  - sms
+                  - whatsapp
+                  - googleBM
+                  - telegram
+                  - instagram
+                  - rcs
+                  - viber
+                  - omnichannel
+              example:
+                messages:
+                - message:
+                    text: Hello world
+                actions: []
+                channel: messenger
+        required: true
+  /contacts/{contact_id}/ai/save_messages:
+    post:
+      tags:
+      - Contacts
+      description: Save a message to the contact message history (AI)
+      operationId: aiSaveMessages
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        default:
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      text:
+                        type: string
+                        example: ''
+                      type:
+                        type: string
+                        enum:
+                        - text
+                        - image
+                        - file
+                        - audio
+                        example: text
+                      role:
+                        type: string
+                        enum:
+                        - assistant
+                        - user
+                        - developer
+                        example: user
+                    required:
+                    - text
+                    - role
+              example:
+                messages:
+                - text: Hi there! How can I assist you today?
+                  type: text
+                  role: assistant
+        required: true
+components:
+  schemas:
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: Tag
+    Custom_field:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        type:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          description: 0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1), 5- Long Text, 6 - Select, 7 - Multi Select
+        value:
+          type: string
+          description: type == 0 then value is string, else value is a number
+      xml:
+        name: Custom_field
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        page_id:
+          type: integer
+          format: int64
+        first_name:
+          type: string
+        last_name:
+          type: string
+        channel:
+          type: integer
+          description: 0 - Messenger, 2 - SMS, 5 - WhatsApp, 7 - Google Business Message, 8 - Telegram, 9 - Webchat
+        profile_pic:
+          type: string
+        locale:
+          type: string
+        gender:
+          type: integer
+          description: 0 - Female, 1 - Male, 2 - Unknown
+        timezone:
+          type: integer
+        last_sent:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds
+        last_delivered:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds
+        last_seen:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds
+        last_interaction:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds
+        subscribed_date:
+          type: string
+          description: Subscribed date in UTC. Example 2022-10-12 14:40:00
+        subscribed:
+          type: integer
+          description: 1 - Subscribed, 2 - Unsubscribed
+        tags:
+          type: array
+          xml:
+            name: tag
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Tag'
+        custom_fields:
+          type: array
+          xml:
+            name: tag
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Custom_field'
+      xml:
+        name: Contact
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-ACCESS-TOKEN

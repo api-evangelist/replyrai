@@ -1,0 +1,55 @@
+openapi: 3.2.0
+info:
+  version: '1.1'
+  title: Docs Templates API
+servers:
+- url: https://app.replyr.ai/api/
+security:
+- APIKeyHeader: []
+tags:
+- name: Templates
+paths:
+  /accounts/templates/{template_id}/install:
+    post:
+      tags:
+      - Templates
+      description: Install a template to your account
+      operationId: installTemplate
+      parameters:
+      - name: template_id
+        in: path
+        required: true
+        description: You can get template ID from the template link.
+        schema:
+          type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                example:
+                  success: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                template_key:
+                  required: true
+                  type: string
+                  description: The template key from the template link.
+              example:
+                template_key: asa823mkAkdk394kdsjs
+        required: true
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-ACCESS-TOKEN
