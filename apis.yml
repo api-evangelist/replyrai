@@ -70,6 +70,8 @@ apis:
   humanURL: https://app.replyr.ai/api
   baseURL: https://app.replyr.ai/api
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -115,6 +117,8 @@ apis:
   humanURL: https://app.replyr.ai/api
   baseURL: https://app.replyr.ai/api
   tags:
+  - Appointment  Management
+  tags_raw:
   - Appointment Management
   properties:
   - type: OpenAPI
@@ -159,6 +163,8 @@ apis:
   humanURL: https://app.replyr.ai/api
   baseURL: https://app.replyr.ai/api
   tags:
+  - E-Commerce
+  tags_raw:
   - Ecommerce
   properties:
   - type: OpenAPI
