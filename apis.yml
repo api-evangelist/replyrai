@@ -117,7 +117,7 @@ apis:
   humanURL: https://app.replyr.ai/api
   baseURL: https://app.replyr.ai/api
   tags:
-  - Appointment  Management
+  - Appointment Management
   tags_raw:
   - Appointment Management
   properties:
