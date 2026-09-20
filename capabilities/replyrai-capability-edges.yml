@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 1
+edge_count: 2
 edges:
 - tag: Pipelines
   spec_file: replyrai-pipelines-api-openapi.yml
@@ -24,3 +24,14 @@ edges:
     Opportunity'
   reason: Explicit sales pipeline with stages and opportunity cards moved between pipelines, plus opportunity
     comments — classic opportunity and pipeline lifecycle management.
+- tag: Contacts
+  spec_file: replyrai-contacts-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.75
+  evidence: POST /contacts createNewContact; GET /contacts/{contact_id}/custom_fields; POST /contacts/{contact_id}/tags/{tag_id}
+    addTagToUser; schema Contact
+  reason: Creation and enrichment of contact records with tags and custom field values is customer master/contact
+    data stewardship in a chat CRM. Messaging sends are secondary to the record CRUD.
+  recovered_from: healthcare-vertical-edges.json
