@@ -39,6 +39,8 @@ paths:
                     type: integer
                     format: int64
                     description: The total number of contacts.
+      summary: Get account information
+      x-summary-source: derived
   /accounts/admins:
     get:
       tags:
@@ -54,6 +56,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Admin'
+      summary: Get account admins
+      x-summary-source: derived
   /accounts/teams:
     get:
       tags:
@@ -69,6 +73,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Team'
+      summary: Get account teams
+      x-summary-source: derived
   /accounts/tags:
     get:
       tags:
@@ -84,6 +90,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Tag'
+      summary: Get account tags
+      x-summary-source: derived
     post:
       tags:
       - Accounts
@@ -113,11 +121,12 @@ paths:
                   type: string
               required:
               - name
+      summary: Create tag
+      x-summary-source: derived
   /accounts/tags/{tag_id}:
     get:
       tags:
       - Accounts
-      description: Get tag by id
       operationId: getTagById
       parameters:
       - name: tag_id
@@ -133,6 +142,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tag'
+      summary: Get tag by id
+      x-summary-source: derived
     delete:
       tags:
       - Accounts
@@ -157,6 +168,8 @@ paths:
                     type: boolean
                 example:
                   success: true
+      summary: Delete tag
+      x-summary-source: derived
   /accounts/tags/name/{tag_name}:
     get:
       tags:
@@ -176,6 +189,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tag'
+      summary: Get tag by name
+      x-summary-source: derived
   /accounts/flows:
     get:
       tags:
@@ -197,6 +212,8 @@ paths:
                       format: int64
                     name:
                       type: string
+      summary: Get account flows
+      x-summary-source: derived
   /accounts/custom_fields:
     get:
       tags:
@@ -223,6 +240,8 @@ paths:
                       description: 0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1)
                     description:
                       type: string
+      summary: Get account custom fields
+      x-summary-source: derived
     post:
       tags:
       - Accounts
@@ -279,11 +298,12 @@ paths:
                 name: lead_score
                 type: 1
         required: true
+      summary: Create custom field
+      x-summary-source: derived
   /accounts/custom_fields/{custom_field_id}:
     get:
       tags:
       - Accounts
-      description: Get custom field by id
       operationId: getCustomFieldById
       parameters:
       - name: custom_field_id
@@ -310,11 +330,12 @@ paths:
                     description: 0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1)
                   description:
                     type: string
+      summary: Get custom field by id
+      x-summary-source: derived
   /accounts/custom_fields/name/{custom_field_name}:
     get:
       tags:
       - Accounts
-      description: Get custom field by name
       operationId: getCustomFieldByName
       parameters:
       - name: custom_field_name
@@ -340,6 +361,8 @@ paths:
                     description: 0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1)
                   description:
                     type: string
+      summary: Get custom field by name
+      x-summary-source: derived
   /accounts/bot_fields/{bot_field_id}:
     get:
       tags:
@@ -373,6 +396,8 @@ paths:
                   name: age
                   type: 1
                   value: 25
+      summary: Get BField value
+      x-summary-source: derived
     post:
       tags:
       - Accounts
@@ -406,6 +431,8 @@ paths:
                   type: string
               required:
               - value
+      summary: Set BField
+      x-summary-source: derived
     delete:
       tags:
       - Accounts
@@ -429,6 +456,8 @@ paths:
                     type: boolean
                 example:
                   success: true
+      summary: Remove BField
+      x-summary-source: derived
   /accounts/integrations:
     get:
       tags:
@@ -493,6 +522,8 @@ paths:
                     properties:
                       active:
                         type: boolean
+      summary: Get account integrations
+      x-summary-source: derived
   /accounts/templates/{template_id}/generateSingleUseLink:
     post:
       tags:
@@ -518,18 +549,10 @@ paths:
                     type: string
                 example:
                   link: https://...
+      summary: Generate template link
+      x-summary-source: derived
 components:
   schemas:
-    Team:
-      type: object
-      properties:
-        id:
-          type: number
-          format: int64
-        name:
-          type: string
-      xml:
-        name: Team
     Admin:
       type: object
       properties:
@@ -561,6 +584,16 @@ components:
           type: string
       xml:
         name: Tag
+    Team:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+      xml:
+        name: Team
   securitySchemes:
     APIKeyHeader:
       type: apiKey

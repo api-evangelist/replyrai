@@ -30,11 +30,12 @@ paths:
                 type: object
         '400':
           description: Invalid parameters
+      summary: Get calendars
+      x-summary-source: derived
   /calendars/{calendar_id}:
     get:
       tags:
       - Appointment Management
-      description: Get product by id
       operationId: getProductById
       parameters:
       - name: calendar_id
@@ -50,6 +51,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Calendar'
+      summary: Get product by id
+      x-summary-source: derived
 components:
   schemas:
     Calendar:

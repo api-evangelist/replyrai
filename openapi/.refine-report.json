@@ -1,0 +1,37 @@
+{
+  "provider": "replyrai",
+  "sources": [
+    "_original/replyrai-platform-api-swagger.json"
+  ],
+  "outputs": [
+    "replyrai-ai-agents-api-openapi.yml",
+    "replyrai-accounts-api-openapi.yml",
+    "replyrai-appointment-management-api-openapi.yml",
+    "replyrai-contacts-api-openapi.yml",
+    "replyrai-ecommerce-api-openapi.yml",
+    "replyrai-pipelines-api-openapi.yml",
+    "replyrai-templates-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "replyrai-platform-api-swagger.json: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "replyrai-platform-api-swagger.json: declared missing tag: AI Agents",
+    "replyrai-platform-api-swagger.json: declared missing tag: Appointment Management",
+    "replyrai-platform-api-swagger.json: declared missing tag: Ecommerce",
+    "replyrai-platform-api-swagger.json: declared missing tag: Pipelines",
+    "replyrai-platform-api-swagger.json: declared missing tag: Templates",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "replyrai-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "replyrai-ai-agents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "replyrai-appointment-management-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "replyrai-contacts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "replyrai-ecommerce-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "replyrai-pipelines-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "replyrai-templates-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

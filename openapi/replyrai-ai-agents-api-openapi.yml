@@ -30,6 +30,8 @@ paths:
                 type: object
         '400':
           description: Invalid parameters
+      summary: Get AI agents
+      x-summary-source: derived
   /agents/{agent_id}:
     get:
       tags:
@@ -50,6 +52,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Agent'
+      summary: Get AIBy id
+      x-summary-source: derived
     post:
       tags:
       - AI Agents
@@ -107,6 +111,8 @@ paths:
               example:
                 prompt: Your prompt here
         required: true
+      summary: Update AIBy id
+      x-summary-source: derived
   /agents/functions:
     get:
       tags:
@@ -135,6 +141,8 @@ paths:
                           type: string
                           format: date-time
                 type: object
+      summary: Get AI functions
+      x-summary-source: derived
   /agents/mcp:
     get:
       tags:
@@ -163,6 +171,8 @@ paths:
                           type: string
                           format: date-time
                 type: object
+      summary: Get AIMCPs
+      x-summary-source: derived
   /agents/files:
     get:
       tags:
@@ -195,6 +205,8 @@ paths:
                           type: string
                           format: date-time
                 type: object
+      summary: Get AI files
+      x-summary-source: derived
 components:
   schemas:
     Agent:

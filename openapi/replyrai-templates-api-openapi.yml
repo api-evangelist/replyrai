@@ -47,6 +47,8 @@ paths:
               example:
                 template_key: asa823mkAkdk394kdsjs
         required: true
+      summary: Install template
+      x-summary-source: derived
 components:
   securitySchemes:
     APIKeyHeader:
