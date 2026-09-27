@@ -557,6 +557,26 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    PipelineStage:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+      xml:
+        name: PipelineStage
+    Pipeline:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+      xml:
+        name: Pipeline
     OpportunityComment:
       type: object
       properties:
@@ -618,26 +638,6 @@ components:
           description: Admin ID
       xml:
         name: Opportunity
-    PipelineStage:
-      type: object
-      properties:
-        id:
-          type: number
-          format: int64
-        name:
-          type: string
-      xml:
-        name: PipelineStage
-    Pipeline:
-      type: object
-      properties:
-        id:
-          type: number
-          format: int64
-        name:
-          type: string
-      xml:
-        name: Pipeline
   securitySchemes:
     APIKeyHeader:
       type: apiKey

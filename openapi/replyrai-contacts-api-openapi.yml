@@ -581,7 +581,7 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Tag:
+    Custom_field:
       type: object
       properties:
         id:
@@ -589,8 +589,23 @@ components:
           format: int64
         name:
           type: string
+        type:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          description: 0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1), 5- Long Text, 6 - Select, 7 - Multi Select
+        value:
+          type: string
+          description: type == 0 then value is string, else value is a number
       xml:
-        name: Tag
+        name: Custom_field
     Contact:
       type: object
       properties:
@@ -654,7 +669,7 @@ components:
             $ref: '#/components/schemas/Custom_field'
       xml:
         name: Contact
-    Custom_field:
+    Tag:
       type: object
       properties:
         id:
@@ -662,23 +677,8 @@ components:
           format: int64
         name:
           type: string
-        type:
-          type: integer
-          enum:
-          - 0
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          description: 0 - Text, 1 - Number, 2- Date (Unix timestamp), 3 - Date & Time (Unix timestamp), 4 - Boolean(0 or 1), 5- Long Text, 6 - Select, 7 - Multi Select
-        value:
-          type: string
-          description: type == 0 then value is string, else value is a number
       xml:
-        name: Custom_field
+        name: Tag
   securitySchemes:
     APIKeyHeader:
       type: apiKey
