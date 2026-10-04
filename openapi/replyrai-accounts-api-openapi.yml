@@ -553,26 +553,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Team:
-      type: object
-      properties:
-        id:
-          type: number
-          format: int64
-        name:
-          type: string
-      xml:
-        name: Team
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-      xml:
-        name: Tag
     Admin:
       type: object
       properties:
@@ -594,6 +574,26 @@ components:
           description: Whether the admin has the availability status set on/off.
       xml:
         name: Tag
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: Tag
+    Team:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+      xml:
+        name: Team
   securitySchemes:
     APIKeyHeader:
       type: apiKey
