@@ -1,0 +1,12 @@
+{
+ "url": "https://app.replyr.ai/php/images.php?id=swagger.json",
+ "requested_url": "https://app.replyr.ai/php/images.php?id=swagger.json",
+ "status": 200,
+ "content_type": "text/html; charset=UTF-8",
+ "bytes": 98033,
+ "sha256": "df6ce7ad8d57563929c1fad94d1cf4dafe8320e79939419381cf2eb3b7a713ae",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
